@@ -12,6 +12,10 @@ body {
   height: 100px;
 }
 
+.checker {
+  width: 90%;
+}
+
 #x0y0, #x2y0, #x4y0, #x6y0, #x1y1, #x3y1, #x5y1, #x7y1, #x0y2, #x2y2, #x4y2, #x6y2, #x1y3, #x3y3, #x5y3, #x7y3, #x0y4, #x2y4, #x4y4, #x6y4, #x1y5, #x3y5, #x5y5, #x7y5, #x0y6, #x2y6, #x4y6, #x6y6, #x1y7, #x3y7, #x5y7, #x7y7 {
   background-color: red;
 }

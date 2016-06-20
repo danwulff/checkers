@@ -92,8 +92,21 @@ export default Ember.Component.extend({
         return board;
       })();
 
-      
+      for(var y = 0; y < 8; y++) {
+        for (var x = 0; x < 8; x++) {
+          var myId = 'x' + x + 'y' + y;
+          //if board[xy math]
+          if (this.game.board [(x + y*8)].value === 'red-reg') {
+            //set image
+            console.log("id: " + myId + ' set image red');
+            this.$(myId).append("<img src='assets/images/circle-red.png' class='checker'/>");
+          } else if (this.game.board [(x + y*8)].value === 'black-reg') {
+            //set image
+            console.log("id: " + myId + ' set image black');
+            this.$(myId).append("<img src='assets/images/circle-black.png' class='checker'/>");
+          }
+        }
+      }
     }
   }
-
 });
