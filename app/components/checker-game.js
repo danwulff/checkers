@@ -15,7 +15,8 @@ export default Ember.Component.extend({
       this.game.board = (function() {
         var board = [];
         //coordinates of 8x8 board, starting at top right
-        //row 1
+
+        //row 0
         board[0] = {x: 0, y: 0, value: null}; // null, 'red-reg', 'red-king', 'black-reg', 'black-king'
         board[1] = {x: 1, y: 0, value: 'black-reg'};
         board[2] = {x: 2, y: 0, value: null};
@@ -24,7 +25,7 @@ export default Ember.Component.extend({
         board[5] = {x: 5, y: 0, value: 'black-reg'};
         board[6] = {x: 6, y: 0, value: null};
         board[7] = {x: 7, y: 0, value: 'black-reg'};
-        //row 2
+        //row 1
         board[8] = {x: 0, y: 1, value: 'black-reg'};
         board[9] = {x: 1, y: 1, value: null};
         board[10] = {x: 2, y: 1, value: 'black-reg'};
@@ -33,7 +34,7 @@ export default Ember.Component.extend({
         board[13] = {x: 5, y: 1, value: null};
         board[14] = {x: 6, y: 1, value: 'black-reg'};
         board[15] = {x: 7, y: 1, value: null};
-        //row 3
+        //row 2
         board[16] = {x: 0, y: 2, value: null};
         board[17] = {x: 1, y: 2, value: 'black-reg'};
         board[18] = {x: 2, y: 2, value: null};
@@ -42,7 +43,7 @@ export default Ember.Component.extend({
         board[21] = {x: 5, y: 2, value: 'black-reg'};
         board[22] = {x: 6, y: 2, value: null};
         board[23] = {x: 7, y: 2, value: 'black-reg'};
-        //row 4
+        //row 3
         board[24] = {x: 0, y: 3, value: null};
         board[25] = {x: 1, y: 3, value: null};
         board[26] = {x: 2, y: 3, value: null};
@@ -51,7 +52,7 @@ export default Ember.Component.extend({
         board[29] = {x: 5, y: 3, value: null};
         board[30] = {x: 6, y: 3, value: null};
         board[31] = {x: 7, y: 3, value: null};
-        //row 5
+        //row 4
         board[32] = {x: 0, y: 4, value: null};
         board[33] = {x: 1, y: 4, value: null};
         board[34] = {x: 2, y: 4, value: null};
@@ -60,7 +61,7 @@ export default Ember.Component.extend({
         board[37] = {x: 5, y: 4, value: null};
         board[38] = {x: 6, y: 4, value: null};
         board[39] = {x: 7, y: 4, value: null};
-        //row 6
+        //row 5
         board[40] = {x: 0, y: 5, value: null};
         board[41] = {x: 1, y: 5, value: 'red-reg'};
         board[42] = {x: 2, y: 5, value: null};
@@ -69,7 +70,7 @@ export default Ember.Component.extend({
         board[45] = {x: 5, y: 5, value: 'red-reg'};
         board[46] = {x: 6, y: 5, value: null};
         board[47] = {x: 7, y: 5, value: 'red-reg'};
-        //row 7
+        //row 6
         board[48] = {x: 0, y: 6, value: null};
         board[49] = {x: 1, y: 6, value: 'red-reg'};
         board[50] = {x: 2, y: 6, value: null};
@@ -78,7 +79,7 @@ export default Ember.Component.extend({
         board[53] = {x: 5, y: 6, value: 'red-reg'};
         board[54] = {x: 6, y: 6, value: null};
         board[55] = {x: 7, y: 6, value: 'red-reg'};
-        //row 8
+        //row 7
         board[56] = {x: 0, y: 7, value: 'red-reg'};
         board[57] = {x: 1, y: 7, value: null};
         board[58] = {x: 2, y: 7, value: 'red-reg'};
