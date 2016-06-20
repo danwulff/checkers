@@ -117,11 +117,28 @@ export default Ember.Component.extend({
     },
     //End: setupGame()
 
-    gameClick(id) {
-      console.log('you clicked! ' + id);
-    }
-    //End: gameClick()
+    // gameClick(id) {
+    //   Ember.$('#' + id).append("<img src='assets/images/circle-black.png' class='checker'/>");
+    //   console.log('you clicked! ' + id);
+    // },
+    // // End: gameClick()
 
+
+    // player Move
+    gameClick() {
+        if (this.game.turn === this.game.playerRed) {
+          console.log("Red Turn");
+          this.set('game.turn', this.game.playerBlack);
+
+        } else if (this.game.turn === this.game.playerBlack) {
+          console.log("Black Turn");
+          this.set('game.turn', this.game.playerRed);
+
+        } else {
+          alert('something broke! refresh');
+        }
+    }
+    // End: player Move
 
   }
   //End: actions
