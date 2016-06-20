@@ -62,14 +62,14 @@ export default Ember.Component.extend({
         board[38] = {x: 6, y: 4, value: null};
         board[39] = {x: 7, y: 4, value: null};
         //row 5
-        board[40] = {x: 0, y: 5, value: null};
-        board[41] = {x: 1, y: 5, value: 'red-reg'};
-        board[42] = {x: 2, y: 5, value: null};
-        board[43] = {x: 3, y: 5, value: 'red-reg'};
-        board[44] = {x: 4, y: 5, value: null};
-        board[45] = {x: 5, y: 5, value: 'red-reg'};
-        board[46] = {x: 6, y: 5, value: null};
-        board[47] = {x: 7, y: 5, value: 'red-reg'};
+        board[40] = {x: 0, y: 5, value: 'red-reg'};
+        board[41] = {x: 1, y: 5, value: null};
+        board[42] = {x: 2, y: 5, value: 'red-reg'};
+        board[43] = {x: 3, y: 5, value: null};
+        board[44] = {x: 4, y: 5, value: 'red-reg'};
+        board[45] = {x: 5, y: 5, value: null};
+        board[46] = {x: 6, y: 5, value: 'red-reg'};
+        board[47] = {x: 7, y: 5, value: null};
         //row 6
         board[48] = {x: 0, y: 6, value: null};
         board[49] = {x: 1, y: 6, value: 'red-reg'};
@@ -99,11 +99,11 @@ export default Ember.Component.extend({
           if (this.game.board [(x + y*8)].value === 'red-reg') {
             //set image
             console.log("id: " + myId + ' set image red');
-            this.$(myId).append("<img src='assets/images/circle-red.png' class='checker'/>");
+            Ember.$('#' + myId).append("<img src='assets/images/circle-red.png' class='checker'/>");
           } else if (this.game.board [(x + y*8)].value === 'black-reg') {
             //set image
             console.log("id: " + myId + ' set image black');
-            this.$(myId).append("<img src='assets/images/circle-black.png' class='checker'/>");
+            Ember.$('#' + myId).append("<img src='assets/images/circle-black.png' class='checker'/>");
           }
         }
       }
