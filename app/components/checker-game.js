@@ -91,6 +91,8 @@ export default Ember.Component.extend({
 
         return board;
       })();
+
+      
     }
   }
 
