@@ -123,6 +123,24 @@ export default Ember.Component.extend({
     gameClick(id) {
       console.log('you clicked! ' + id);
 
+      //if game started
+        //if checker is on that square && belongs to whose turn it is
+          //change pointer && check for valid 'moves' && change 'click' to second click
+
+
+      //else
+        //don't do anything, or alert?
+
+
+
+
+
+
+
+      //end game logic
+
+
+
       // if (this.game.turn === this.game.playerRed) {
       //   console.log("Red Turn");
       //   this.set('game.turn', this.game.playerBlack);
