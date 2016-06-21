@@ -17,6 +17,7 @@ export default Ember.Component.extend({
         this.game.playerBlack = this.get('playerBlack');  //username
         this.set('game.turn', this.game.playerRed);  //set to 'username' of playerRed
         this.game.click = 'first';
+        this.game.startPosition = null;
         this.game.board = (function() {
           var board = [];
           //coordinates of 8x8 board, starting at top right
@@ -119,7 +120,7 @@ export default Ember.Component.extend({
 
 
 
-    // player Move
+    // Player Click
     gameClick(id) {
       // Helper functions-------------------------------------------------------
 
@@ -129,6 +130,11 @@ export default Ember.Component.extend({
         var x = parseInt(id.charAt(1));
         var y = parseInt(id.charAt(3));
         return x + (y*8);
+      };
+
+      //coordinates to id
+      var coordinatesToId = function (x, y) {
+        return "x" + x + "y" + y;
       };
 
       //check for valid first click (clicked a checker that belongs to current turn)
@@ -150,9 +156,39 @@ export default Ember.Component.extend({
         }
       };
 
+      //check for valid first click (clicked a checker that belongs to current turn)
+      var validSecondChecker = function (id, game) {
+        var valid = false;
+
+        //if location is next to original && is empty
+        if (isNearby(id, game) && game.board[IdToIndex(id)].value === null) {
+          valid = true;
+        } //else if location is empty and space between contains enemy color
+
+        return valid; //true or false
+      };
+
+      var isNearby = function (id, game) {
+        var valid = false;
+        var startX = parseInt(game.startPosition.charAt(1));
+        var startY = parseInt(game.startPosition.charAt(3));
+        var newX = parseInt(id.charAt(1));
+        var newY = parseInt(id.charAt(3));
+
+        //if new (red) is up and left from original
+        if (newY === (startY - 1) && newX === (startX - 1)) {
+          valid = true;
+        } //else if new (red) is up and right from original
+        else if (newY === (startY - 1) && newX === (startX + 1)) {
+          valid = true;
+        }
+        return valid
+      };
+
       // End: Helper Functions--------------------------------------------------
 
 
+      // Game Logic-------------------------------------------------------------
       //if game started
       if (this.game.turn !== null) {
         //if first click && valid checker (belongs to user)
@@ -161,41 +197,53 @@ export default Ember.Component.extend({
           pickUpChecker(id, this.game);
           //change 'click' to second click
           this.game.click = 'second';
+          //save original position
+          this.game.startPosition = id;
         }
-        //else second click
-          //if valid move
-            //make move and increment turn
-          //else (not valid move)
-            //don't do anything
+        //else second click and valid move
+        else if (this.game.click === 'second' && validSecondChecker(id, this.game)) {
+          //make move
+            //change board array
+              //new position filled
+          this.game.board[IdToIndex(id)].value = this.game.board[IdToIndex(this.game.startPosition)].value;
+              //old position null
+          this.game.board[IdToIndex(this.game.startPosition)].value = null;
+
+          //display checker in new position
+          if (this.game.board[IdToIndex(id)].value === 'red-reg') {
+            Ember.$('#' + id).append("<img src='assets/images/circle-red.png' class='checker'/>");
+          } else if (this.game.board[IdToIndex(id)].value === 'black-reg') {
+            Ember.$('#' + id).append("<img src='assets/images/circle-black.png' class='checker'/>");
+          }
+
+          //cursor back to normal
+          //change pointer to match user turn
+          if (this.game.turn === this.game.playerRed) {
+            Ember.$(".grid").removeClass('red-pointer');
+          } else {
+            Ember.$(".grid").removeClass('black-pointer');
+          }
+
+          //increment turn && click
+          if(this.game.turn === this.game.playerRed) {
+            this.set('game.turn', this.game.playerBlack);
+          } else {
+            this.set('game.turn', this.game.playerRed); 
+          }
+          this.game.click = 'first';
+
+        } else { //else (not valid move)
+          //don't do anything
+        }
       }
       //else
       else {
         //don't do anything, or alert?
       }
+      // End: Game Logic--------------------------------------------------------
 
-
-
-
-
-
-      //end game logic
-
-
-
-      // if (this.game.turn === this.game.playerRed) {
-      //   console.log("Red Turn");
-      //   this.set('game.turn', this.game.playerBlack);
-      //
-      // } else if (this.game.turn === this.game.playerBlack) {
-      //   console.log("Black Turn");
-      //   this.set('game.turn', this.game.playerRed);
-      //
-      // } else {
-      //   alert('something broke! refresh');
-      // }
     }
-    // End: player Move
-
+    // End: Player Click
   }
   //End: actions
 });
