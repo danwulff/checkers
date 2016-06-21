@@ -12,6 +12,17 @@ body {
   height: 100px;
 }
 
+.red-pointer:hover {
+  border: 1px solid yellow;
+  cursor:url('/assets/images/circle-red-arrow.png'), auto;
+}
+
+.black-pointer:hover {
+  border: 1px solid yellow;
+  cursor:url('/assets/images/circle-black-arrow.png'), auto;
+}
+
+
 .checker {
   width: 90%;
 }

@@ -136,6 +136,20 @@ export default Ember.Component.extend({
         var valid = ((game.board[IdToIndex(id)].value === 'red-reg' || game.board[IdToIndex(id)].value === 'red-king') && (game.turn === game.playerRed)) || ((game.board[IdToIndex(id)].value === 'black-reg' || game.board[IdToIndex(id)].value === 'black-king') && (game.turn === game.playerBlack));
         return valid; //true or false
       };
+
+      //"pick up" checker from location, change pointer to indicate "pick up"
+      var pickUpChecker = function (id, game) {
+        //remove image from grid
+        Ember.$('#' + id).html(id); //todo: remove 'id' from html() eventually
+
+        //change pointer to match user turn
+        if (game.turn === game.playerRed) {
+          Ember.$(".grid").addClass('red-pointer');
+        } else {
+          Ember.$(".grid").addClass('black-pointer');
+        }
+      };
+
       // End: Helper Functions--------------------------------------------------
 
 
@@ -143,8 +157,10 @@ export default Ember.Component.extend({
       if (this.game.turn !== null) {
         //if first click && valid checker (belongs to user)
         if(this.game.click === 'first' &&  validFirstChecker(id, this.game)) {
-          //change pointer && check for valid 'moves' && change 'click' to second click
-
+          //change pointer
+          pickUpChecker(id, this.game);
+          //change 'click' to second click
+          this.game.click = 'second';
         }
         //else second click
           //if valid move
