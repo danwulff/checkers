@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   game: {
     board: [],
-    playerRed: null,
+    playerRed: null,  //username of red player
     playerBlack: null,
     turn: null,
     click: null
@@ -117,26 +117,23 @@ export default Ember.Component.extend({
     },
     //End: setupGame()
 
-    // gameClick(id) {
-    //   Ember.$('#' + id).append("<img src='assets/images/circle-black.png' class='checker'/>");
-    //   console.log('you clicked! ' + id);
-    // },
-    // // End: gameClick()
 
 
     // player Move
-    gameClick() {
-        if (this.game.turn === this.game.playerRed) {
-          console.log("Red Turn");
-          this.set('game.turn', this.game.playerBlack);
+    gameClick(id) {
+      console.log('you clicked! ' + id);
 
-        } else if (this.game.turn === this.game.playerBlack) {
-          console.log("Black Turn");
-          this.set('game.turn', this.game.playerRed);
-
-        } else {
-          alert('something broke! refresh');
-        }
+      // if (this.game.turn === this.game.playerRed) {
+      //   console.log("Red Turn");
+      //   this.set('game.turn', this.game.playerBlack);
+      //
+      // } else if (this.game.turn === this.game.playerBlack) {
+      //   console.log("Black Turn");
+      //   this.set('game.turn', this.game.playerRed);
+      //
+      // } else {
+      //   alert('something broke! refresh');
+      // }
     }
     // End: player Move
 
