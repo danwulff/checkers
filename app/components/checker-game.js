@@ -6,7 +6,7 @@ export default Ember.Component.extend({
     playerRed: null,  //username of red player
     playerBlack: null,
     turn: null,
-    click: null
+    click: null     //'first' or 'second'
   },
   actions: {
     setupGame() {
@@ -16,7 +16,7 @@ export default Ember.Component.extend({
         this.game.playerRed = this.get('playerRed');  //username
         this.game.playerBlack = this.get('playerBlack');  //username
         this.set('game.turn', this.game.playerRed);  //set to 'username' of playerRed
-        this.game.click = 'first click';
+        this.game.click = 'first';
         this.game.board = (function() {
           var board = [];
           //coordinates of 8x8 board, starting at top right
@@ -121,16 +121,38 @@ export default Ember.Component.extend({
 
     // player Move
     gameClick(id) {
-      console.log('you clicked! ' + id);
+      // Helper functions-------------------------------------------------------
+      var IdToIndex = function (id) {
+        //x0y0 -> 0, x1y0 -> 1, x0y1 -> 8
+        var x = parseInt(id.charAt(1));
+        var y = parseInt(id.charAt(3));
+        return x + (y*8);
+      };
+
+      var validChecker = function (id, game) {
+        var valid = ((game.board[IdToIndex(id)].value === 'red-reg' || game.board[IdToIndex(id)].value === 'red-king') && (game.turn === game.playerRed)) || ((game.board[IdToIndex(id)].value === 'black-reg' || game.board[IdToIndex(id)].value === 'black-king') && (game.turn === game.playerBlack));
+
+        return valid;
+      };
+      // End: Helper Functions--------------------------------------------------
+
 
       //if game started
-        //if checker is on that square && belongs to whose turn it is
+      if (this.game.turn !== null) {
+        //if first click && valid checker (belongs to user)
+        if(this.game.click === 'first' &&  validChecker(id, this.game)) {
           //change pointer && check for valid 'moves' && change 'click' to second click
-
-
+        }
+        //else second click
+          //if valid move
+            //make move and increment turn
+          //else (not valid move)
+            //don't do anything
+      }
       //else
+      else {
         //don't do anything, or alert?
-
+      }
 
 
 
