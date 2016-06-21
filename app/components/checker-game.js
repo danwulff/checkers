@@ -122,6 +122,8 @@ export default Ember.Component.extend({
     // player Move
     gameClick(id) {
       // Helper functions-------------------------------------------------------
+
+      //change incoming id (from click action) to array value for board
       var IdToIndex = function (id) {
         //x0y0 -> 0, x1y0 -> 1, x0y1 -> 8
         var x = parseInt(id.charAt(1));
@@ -129,10 +131,10 @@ export default Ember.Component.extend({
         return x + (y*8);
       };
 
-      var validChecker = function (id, game) {
+      //check for valid first click (clicked a checker that belongs to current turn)
+      var validFirstChecker = function (id, game) {
         var valid = ((game.board[IdToIndex(id)].value === 'red-reg' || game.board[IdToIndex(id)].value === 'red-king') && (game.turn === game.playerRed)) || ((game.board[IdToIndex(id)].value === 'black-reg' || game.board[IdToIndex(id)].value === 'black-king') && (game.turn === game.playerBlack));
-
-        return valid;
+        return valid; //true or false
       };
       // End: Helper Functions--------------------------------------------------
 
@@ -140,8 +142,9 @@ export default Ember.Component.extend({
       //if game started
       if (this.game.turn !== null) {
         //if first click && valid checker (belongs to user)
-        if(this.game.click === 'first' &&  validChecker(id, this.game)) {
+        if(this.game.click === 'first' &&  validFirstChecker(id, this.game)) {
           //change pointer && check for valid 'moves' && change 'click' to second click
+
         }
         //else second click
           //if valid move
