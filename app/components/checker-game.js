@@ -175,12 +175,22 @@ export default Ember.Component.extend({
         var newX = parseInt(id.charAt(1));
         var newY = parseInt(id.charAt(3));
 
-        //if new (red) is up and left from original
-        if (newY === (startY - 1) && newX === (startX - 1)) {
-          valid = true;
-        } //else if new (red) is up and right from original
-        else if (newY === (startY - 1) && newX === (startX + 1)) {
-          valid = true;
+        if (game.turn === game.playerRed) {
+          //if new (red) is up and left from original
+          if (newY === (startY - 1) && newX === (startX - 1)) {
+            valid = true;
+          } //else if new (red) is up and right from original
+          else if (newY === (startY - 1) && newX === (startX + 1)) {
+            valid = true;
+          }
+        } else {
+          //if new (red) is up and left from original
+          if (newY === (startY + 1) && newX === (startX - 1)) {
+            valid = true;
+          } //else if new (red) is up and right from original
+          else if (newY === (startY + 1) && newX === (startX + 1)) {
+            valid = true;
+          }
         }
         return valid
       };
@@ -228,7 +238,7 @@ export default Ember.Component.extend({
           if(this.game.turn === this.game.playerRed) {
             this.set('game.turn', this.game.playerBlack);
           } else {
-            this.set('game.turn', this.game.playerRed); 
+            this.set('game.turn', this.game.playerRed);
           }
           this.game.click = 'first';
 
@@ -236,6 +246,7 @@ export default Ember.Component.extend({
           //don't do anything
         }
       }
+
       //else
       else {
         //don't do anything, or alert?
