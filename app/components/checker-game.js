@@ -395,9 +395,16 @@ export default Ember.Component.extend({
         var enemyX = (startX + newX) / 2;
         var enemyY = (startY + newY) / 2;
         //check for not null and not current player (enemy)
-        if (game.board[coordinatesToIndex(enemyX, enemyY)].value !== null && game.board[coordinatesToIndex(enemyX, enemyY)].value !== game.turn) {
-          valid = true;
+        if(game.turn === game.playerRed) {
+          if (game.board[coordinatesToIndex(enemyX, enemyY)].value !== null && (game.board[coordinatesToIndex(enemyX, enemyY)].value !== 'red-reg' && game.board[coordinatesToIndex(enemyX, enemyY)].value !== 'red-king')) {
+            valid = true;
+          }
+        } else {
+          if (game.board[coordinatesToIndex(enemyX, enemyY)].value !== null && (game.board[coordinatesToIndex(enemyX, enemyY)].value !== 'black-reg' && game.board[coordinatesToIndex(enemyX, enemyY)].value !== 'black-king')) {
+            valid = true;
+          }
         }
+
         return valid;
       };
 
@@ -435,15 +442,18 @@ export default Ember.Component.extend({
           //make move
             //change board array
               //new position filled
-          if (this.game.turn === this.game.playerRed && !idRedKinged(id)) {
-            this.game.board[idToIndex(id)].value = 'red-reg';
-          } else if(this.game.turn === this.game.playerRed && idRedKinged(id)) {
-            this.game.board[idToIndex(id)].value = 'red-king';
-          } else if (this.game.turn === this.game.playerBlack && !idBlackKinged(id)) {
-            this.game.board[idToIndex(id)].value = 'black-reg';
-          } else if(this.game.turn === this.game.playerBlack && idBlackKinged(id)) {
-            this.game.board[idToIndex(id)].value = 'black-king';
-          }
+        if (this.game.turn === this.game.playerRed && !idRedKinged(id) && this.game.board[idToIndex(this.game.startPosition)].value !== 'red-king') {
+          this.game.board[idToIndex(id)].value = 'red-reg';
+        }
+        else if(this.game.turn === this.game.playerRed && idRedKinged(id) || this.game.board[idToIndex(this.game.startPosition)].value === 'red-king') {
+          this.game.board[idToIndex(id)].value = 'red-king';
+        }
+        else if (this.game.turn === this.game.playerBlack && !idBlackKinged(id) && this.game.board[idToIndex(this.game.startPosition)].value !== 'black-king') {
+          this.game.board[idToIndex(id)].value = 'black-reg';
+        }
+        else if(this.game.turn === this.game.playerBlack && idBlackKinged(id)  || this.game.board[idToIndex(this.game.startPosition)].value === 'black-king') {
+          this.game.board[idToIndex(id)].value = 'black-king';
+        }
               //old position null
           this.game.board[idToIndex(this.game.startPosition)].value = null;
 
@@ -463,13 +473,16 @@ export default Ember.Component.extend({
           //make move
             //change board array
               //new positition filled
-          if (this.game.turn === this.game.playerRed && !idRedKinged(id)) {
+          if (this.game.turn === this.game.playerRed && !idRedKinged(id) && this.game.board[idToIndex(this.game.startPosition)].value !== 'red-king') {
             this.game.board[idToIndex(id)].value = 'red-reg';
-          } else if(this.game.turn === this.game.playerRed && idRedKinged(id)) {
+          }
+          else if(this.game.turn === this.game.playerRed && idRedKinged(id) || this.game.board[idToIndex(this.game.startPosition)].value === 'red-king') {
             this.game.board[idToIndex(id)].value = 'red-king';
-          } else if (this.game.turn === this.game.playerBlack && !idBlackKinged(id)) {
+          }
+          else if (this.game.turn === this.game.playerBlack && !idBlackKinged(id) && this.game.board[idToIndex(this.game.startPosition)].value !== 'black-king') {
             this.game.board[idToIndex(id)].value = 'black-reg';
-          } else if(this.game.turn === this.game.playerBlack && idBlackKinged(id)) {
+          }
+          else if(this.game.turn === this.game.playerBlack && idBlackKinged(id)  || this.game.board[idToIndex(this.game.startPosition)].value === 'black-king') {
             this.game.board[idToIndex(id)].value = 'black-king';
           }
               //old position null
