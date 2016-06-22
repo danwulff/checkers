@@ -156,6 +156,23 @@ export default Ember.Component.extend({
         }
       };
 
+      //"place" checker at id location and rever pointer to normal
+      var placeChecker = function (id, game) {
+        //display checker in new position
+        if (game.board[IdToIndex(id)].value === 'red-reg') {
+          Ember.$('#' + id).append("<img src='assets/images/circle-red.png' class='checker'/>");
+        } else if (game.board[IdToIndex(id)].value === 'black-reg') {
+          Ember.$('#' + id).append("<img src='assets/images/circle-black.png' class='checker'/>");
+        }
+        //cursor back to normal
+        //change pointer to match user turn
+        if (game.turn === game.playerRed) {
+          Ember.$(".grid").removeClass('red-pointer');
+        } else {
+          Ember.$(".grid").removeClass('black-pointer');
+        }
+      }
+
       //check for valid first click (clicked a checker that belongs to current turn)
       var validSecondChecker = function (id, game) {
         var valid = false;
@@ -219,20 +236,8 @@ export default Ember.Component.extend({
               //old position null
           this.game.board[IdToIndex(this.game.startPosition)].value = null;
 
-          //display checker in new position
-          if (this.game.board[IdToIndex(id)].value === 'red-reg') {
-            Ember.$('#' + id).append("<img src='assets/images/circle-red.png' class='checker'/>");
-          } else if (this.game.board[IdToIndex(id)].value === 'black-reg') {
-            Ember.$('#' + id).append("<img src='assets/images/circle-black.png' class='checker'/>");
-          }
-
-          //cursor back to normal
-          //change pointer to match user turn
-          if (this.game.turn === this.game.playerRed) {
-            Ember.$(".grid").removeClass('red-pointer');
-          } else {
-            Ember.$(".grid").removeClass('black-pointer');
-          }
+          //place checker at id location and revert pointer to normal
+          placeChecker(id, this.game);
 
           //increment turn && click
           if(this.game.turn === this.game.playerRed) {
@@ -241,8 +246,12 @@ export default Ember.Component.extend({
             this.set('game.turn', this.game.playerRed);
           }
           this.game.click = 'first';
-
-        } else { //else (not valid move)
+        } else if (this.game.click === 'second' && id === this.game.startPosition){ //if placed back at original position
+          //place checker back down
+          placeChecker(id, this.game);
+          //back to first click status
+          this.game.click = 'first';
+        } else {
           //don't do anything
         }
       }
