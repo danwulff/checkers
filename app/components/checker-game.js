@@ -260,13 +260,29 @@ export default Ember.Component.extend({
         var newY = parseInt(id.charAt(3));
 
         if (game.turn === game.playerRed) {
-          //if new (red) is up and left from original
-          if (newY === (startY - 1) && newX === (startX - 1)) {
-            valid = true;
-          } //else if new (red) is up and right from original
-          else if (newY === (startY - 1) && newX === (startX + 1)) {
-            valid = true;
+          if (game.board[idToIndex(game.startPosition)].value === 'red-reg') {
+            if (newY === (startY - 1) && newX === (startX - 1)) {
+              valid = true;
+            } //else if new (red) is up and right from original
+            else if (newY === (startY - 1) && newX === (startX + 1)) {
+              valid = true;
+            }
+          } else if (game.board[idToIndex(game.startPosition)].value === 'red-king') {
+            if (newY === (startY - 1) && newX === (startX - 1)) {
+              valid = true;
+            } //else if new (red) is up and right from original
+            else if (newY === (startY - 1) && newX === (startX + 1)) {
+              valid = true;
+            }
+            else if (newY === (startY + 1) && newX === (startX - 1)) {
+              valid = true;
+            }
+            else if (newY === (startY + 1) && newX === (startX + 1)) {
+              valid = true;
+            }
           }
+          //if new (red) is up and left from original
+
         } else { //black turn
           //if new (black) is up and left from original
           if (newY === (startY + 1) && newX === (startX - 1)) {
