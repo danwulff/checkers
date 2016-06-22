@@ -138,11 +138,6 @@ export default Ember.Component.extend({
         return x + "," + y;
       }
 
-      //coordinates to id
-      var coordinatesToId = function (x, y) {
-        return "x" + x + "y" + y;
-      };
-
       //check for valid first click (clicked a checker that belongs to current turn)
       var validFirstChecker = function (id, game) {
         var valid = ((game.board[IdToIndex(id)].value === 'red-reg' || game.board[IdToIndex(id)].value === 'red-king') && (game.turn === game.playerRed)) || ((game.board[IdToIndex(id)].value === 'black-reg' || game.board[IdToIndex(id)].value === 'black-king') && (game.turn === game.playerBlack));
@@ -233,7 +228,7 @@ export default Ember.Component.extend({
           //save original position
           this.game.startPosition = id;
         }
-        //else second click and valid move
+        //else second click and valid move (empty spot)
         else if (this.game.click === 'second' && validSecondChecker(id, this.game)) {
           //make move
             //change board array
@@ -242,7 +237,7 @@ export default Ember.Component.extend({
               //old position null
           this.game.board[IdToIndex(this.game.startPosition)].value = null;
 
-          //place checker at id location and revert pointer to normal
+          //draw grid changes (place checker at id location and revert pointer to normal)
           placeChecker(id, this.game);
 
           //increment turn && click
@@ -252,7 +247,25 @@ export default Ember.Component.extend({
             this.set('game.turn', this.game.playerRed);
           }
           this.game.click = 'first';
-        } else if (this.game.click === 'second' && id === this.game.startPosition){ //if placed back at original position
+        //else second click and kill move (empty spot & jump over enemy)
+        } else if (this.game.click === 'second' && false /*validJumpMove(id, this.game)*/) {
+          //make move
+            //change board array
+              //new positition filled
+
+              //old position null
+
+              //enemy position null
+
+          //draw grid changes (placeholder checker as lightly shaded, keep cursor)
+
+          //draw grid changes (removeEnemyChecker)
+
+          //todo: will need to add variable called "jumpMove" to indicate that further logic will be for jump move (can only continue to move this piece, and setting piece back down to where it is will cause turn to increment)
+
+          //don't increment click or turn
+
+        } else if (this.game.click === 'second' && id === this.game.startPosition) { //if placed back at original position
           //place checker back down
           placeChecker(id, this.game);
           //back to first click status
