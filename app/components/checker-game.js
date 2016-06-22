@@ -2,13 +2,16 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   game: {
-    board: [],
     playerRed: null,  //username of red player
     playerBlack: null,
-    turn: null,
-    click: null     //'first' or 'second'
+    turn: null,      //playerRed or PlayerBlack value
+    click: null,     //'first' or 'second'
+    jumpMove: null,  //false or true
+    startPosition: null,  //id of position of checker origin
+    board: [] //array of EVERYTHING
   },
   actions: {
+    //setupGame()---------------------------------------------------------------
     setupGame() {
       if(this.get('playerRed') === "" || this.get('playerRed') === undefined || this.get('playerBlack') === "" || this.get('playerBlack') === undefined ) {
         alert('please enter player names');
@@ -107,9 +110,15 @@ export default Ember.Component.extend({
             if (this.game.board [(x + y*8)].value === 'red-reg') {
               //set image
               Ember.$('#' + myId).append("<img src='assets/images/circle-red.png' class='checker'/>");
+            } else if (this.game.board [(x + y*8)].value === 'red-king') {
+              //set image
+              Ember.$('#' + myId).append("<img src='assets/images/king-red.png' class='checker'/>");
             } else if (this.game.board [(x + y*8)].value === 'black-reg') {
               //set image
               Ember.$('#' + myId).append("<img src='assets/images/circle-black.png' class='checker'/>");
+            } else if (this.game.board [(x + y*8)].value === 'black-king') {
+              //set image
+              Ember.$('#' + myId).append("<img src='assets/images/king-black.png' class='checker'/>");
             }
           }
         }
@@ -117,7 +126,7 @@ export default Ember.Component.extend({
         Ember.$('#startGame').hide();
       }
     },
-    //End: setupGame()
+    //End: setupGame()----------------------------------------------------------
 
 
 
@@ -126,7 +135,7 @@ export default Ember.Component.extend({
       // Helper functions-------------------------------------------------------
 
       //change incoming id (from click action) to array value for board
-      var IdToIndex = function (id) {
+      var idToIndex = function (id) {
         //x0y0 -> 0, x1y0 -> 1, x0y1 -> 8
         var x = parseInt(id.charAt(1));
         var y = parseInt(id.charAt(3));
@@ -134,34 +143,50 @@ export default Ember.Component.extend({
       };
 
       //change incoming coordinates (from click action) to array value for board
-      var CoordinatesToIndex = function (x, y) {
+      var coordinatesToIndex = function (x, y) {
         //x0y0 -> 0, x1y0 -> 1, x0y1 -> 8
         return x + (y*8);
       };
 
-      var IndexToId = function (index) {
+      var indexToId = function (index) {
         var x = index % 8;
         var y = Math.floor(index / 8);
 
         return "x" + x + "y" + y;
-      }
+      };
 
-      var IdToTablePrint = function (id) {
+      var idToTablePrint = function (id) {
         var x = id.charAt(1);
         var y = id.charAt(3);
         return x + "," + y;
       };
 
+      //need to check if red got to y=0 for king
+      var idRedKinged = function (id) {
+        var valid = false;
+        var y = parseInt(id.charAt(3));
+        if (y === 0) valid = true;
+        return valid;
+      };
+
+      //need to check if black got to y=7 for king
+      var idBlackKinged = function (id) {
+        var valid = false;
+        var y = parseInt(id.charAt(3));
+        if (y === 7) valid = true;
+        return valid;
+      };
+
       //check for valid first click (clicked a checker that belongs to current turn)
       var validFirstChecker = function (id, game) {
-        var valid = ((game.board[IdToIndex(id)].value === 'red-reg' || game.board[IdToIndex(id)].value === 'red-king') && (game.turn === game.playerRed)) || ((game.board[IdToIndex(id)].value === 'black-reg' || game.board[IdToIndex(id)].value === 'black-king') && (game.turn === game.playerBlack));
+        var valid = ((game.board[idToIndex(id)].value === 'red-reg' || game.board[idToIndex(id)].value === 'red-king') && (game.turn === game.playerRed)) || ((game.board[idToIndex(id)].value === 'black-reg' || game.board[idToIndex(id)].value === 'black-king') && (game.turn === game.playerBlack));
         return valid; //true or false
       };
 
       //"pick up" checker from location, change pointer to indicate "pick up"
       var pickUpChecker = function (id, game) {
         //remove image from grid
-        Ember.$('#' + id).html(IdToTablePrint(id)); //todo: remove 'id' from html() eventually
+        Ember.$('#' + id).html(idToTablePrint(id)); //todo: remove 'id' from html() eventually
 
         //change pointer to match user turn
         if (game.turn === game.playerRed) {
@@ -174,10 +199,14 @@ export default Ember.Component.extend({
       //"place" checker at id location and rever pointer to normal
       var placeChecker = function (id, game) {
         //display checker in new position
-        if (game.board[IdToIndex(id)].value === 'red-reg') {
-          Ember.$('#' + id).html(IdToTablePrint(id) + "<img src='assets/images/circle-red.png' class='checker'/>");
-        } else if (game.board[IdToIndex(id)].value === 'black-reg') {
-          Ember.$('#' + id).html(IdToTablePrint(id) + "<img src='assets/images/circle-black.png' class='checker'/>");
+        if (game.board[idToIndex(id)].value === 'red-reg') {
+          Ember.$('#' + id).html(idToTablePrint(id) + "<img src='assets/images/circle-red.png' class='checker'/>");
+        } else if (game.board[idToIndex(id)].value === 'red-king') {
+          Ember.$('#' + id).html(idToTablePrint(id) + "<img src='assets/images/king-red.png' class='checker'/>");
+        } else if (game.board[idToIndex(id)].value === 'black-reg') {
+          Ember.$('#' + id).html(idToTablePrint(id) + "<img src='assets/images/circle-black.png' class='checker'/>");
+        } else if (game.board[idToIndex(id)].value === 'black-king') {
+          Ember.$('#' + id).html(idToTablePrint(id) + "<img src='assets/images/king-black.png' class='checker'/>");
         }
         //cursor back to normal
         //change pointer to match user turn
@@ -186,20 +215,24 @@ export default Ember.Component.extend({
         } else {
           Ember.$(".grid").removeClass('black-pointer');
         }
-      }
+      };
 
       //"place" placeholder checker at id location and rever pointer to normal
       var placePlaceholder = function (id, game) {
         //delete checker in start position
-        Ember.$('#' + game.startPosition).html(IdToTablePrint(game.startPosition));
+        Ember.$('#' + game.startPosition).html(idToTablePrint(game.startPosition));
 
         //display checker in new position
-        if (game.board[IdToIndex(id)].value === 'red-reg') {
-          Ember.$('#' + id).html(IdToTablePrint(id) + "<img src='assets/images/circle-red.png' class='checker' style='opacity: 0.5'/>");
-        } else if (game.board[IdToIndex(id)].value === 'black-reg') {
-          Ember.$('#' + id).html(IdToTablePrint(id) + "<img src='assets/images/circle-black.png' class='checker' style='opacity: 0.5'/>");
+        if (game.board[idToIndex(id)].value === 'red-reg') {
+          Ember.$('#' + id).html(idToTablePrint(id) + "<img src='assets/images/circle-red.png' class='checker' style='opacity: 0.5'/>");
+        } else if (game.board[idToIndex(id)].value === 'red-king') {
+          Ember.$('#' + id).html(idToTablePrint(id) + "<img src='assets/images/king-red.png' class='checker' style='opacity: 0.5'/>");
+        } else if (game.board[idToIndex(id)].value === 'black-reg') {
+          Ember.$('#' + id).html(idToTablePrint(id) + "<img src='assets/images/circle-black.png' class='checker' style='opacity: 0.5'/>");
+        } else if (game.board[idToIndex(id)].value === 'black-king') {
+          Ember.$('#' + id).html(idToTablePrint(id) + "<img src='assets/images/king-black.png' class='checker' style='opacity: 0.5'/>");
         }
-      }
+      };
 
       //"remove" checker at id location and rever pointer to normal
       var removeEnemyChecker = function (id, game) {
@@ -207,18 +240,18 @@ export default Ember.Component.extend({
         var enemyId = "";
 
         enemyIndex = enemyJumpCalcs(id, game);
-        enemyId = IndexToId(enemyIndex);
+        enemyId = indexToId(enemyIndex);
 
         //remove enemy checker
-        Ember.$('#' + enemyId).html(IdToTablePrint(enemyId));
-      }
+        Ember.$('#' + enemyId).html(idToTablePrint(enemyId));
+      };
 
       //check for valid first click (clicked a checker that belongs to current turn)
       var validSecondChecker = function (id, game) {
         var valid = false;
 
         //if location is next to original && is empty
-        if (isNearby(id, game) && game.board[IdToIndex(id)].value === null) {
+        if (isNearby(id, game) && game.board[idToIndex(id)].value === null) {
           valid = true;
         } //else if location is empty and space between contains enemy color
 
@@ -229,11 +262,11 @@ export default Ember.Component.extend({
       var validJumpMove = function (id, game) {
         var valid = false;
         //if blank and one over and enemy in between
-        if (game.board[IdToIndex(id)].value === null && isOneOver(id, game) && isEnemyBetween(id, game)) {
+        if (game.board[idToIndex(id)].value === null && isOneOver(id, game) && isEnemyBetween(id, game)) {
           valid = true;
         }
         return valid;
-      }
+      };
 
       var isNearby = function (id, game) {
         var valid = false;
@@ -243,23 +276,54 @@ export default Ember.Component.extend({
         var newY = parseInt(id.charAt(3));
 
         if (game.turn === game.playerRed) {
-          //if new (red) is up and left from original
-          if (newY === (startY - 1) && newX === (startX - 1)) {
-            valid = true;
-          } //else if new (red) is up and right from original
-          else if (newY === (startY - 1) && newX === (startX + 1)) {
-            valid = true;
+          if (game.board[idToIndex(game.startPosition)].value === 'red-reg') {
+            if (newY === (startY - 1) && newX === (startX - 1)) {
+              valid = true;
+            } //else if new (red) is up and right from original
+            else if (newY === (startY - 1) && newX === (startX + 1)) {
+              valid = true;
+            }
+          } else if (game.board[idToIndex(game.startPosition)].value === 'red-king') {
+            if (newY === (startY - 1) && newX === (startX - 1)) {
+              valid = true;
+            } //else if new (red) is up and right from original
+            else if (newY === (startY - 1) && newX === (startX + 1)) {
+              valid = true;
+            }
+            else if (newY === (startY + 1) && newX === (startX - 1)) {
+              valid = true;
+            }
+            else if (newY === (startY + 1) && newX === (startX + 1)) {
+              valid = true;
+            }
           }
+          //if new (red) is up and left from original
+
         } else { //black turn
           //if new (black) is up and left from original
-          if (newY === (startY + 1) && newX === (startX - 1)) {
-            valid = true;
-          } //else if new (black) is up and right from original
-          else if (newY === (startY + 1) && newX === (startX + 1)) {
-            valid = true;
+          if (game.board[idToIndex(game.startPosition)].value === 'black-reg') {
+            if (newY === (startY + 1) && newX === (startX - 1)) {
+              valid = true;
+            } //else if new (black) is up and right from original
+            else if (newY === (startY + 1) && newX === (startX + 1)) {
+              valid = true;
+            }
+          } else if (game.board[idToIndex(game.startPosition)].value === 'black-king'){
+              if (newY === (startY + 1) && newX === (startX - 1)) {
+                valid = true;
+              } //else if new (black) is up and right from original
+              else if (newY === (startY + 1) && newX === (startX + 1)) {
+                valid = true;
+              }
+              else if (newY === (startY - 1) && newX === (startX + 1)) {
+                valid = true;
+              }
+              else if (newY === (startY - 1) && newX === (startX - 1)) {
+                valid = true;
+              }
+            }
           }
-        }
-        return valid
+        return valid;
       };
 
       var isOneOver = function (id, game) {
@@ -270,25 +334,57 @@ export default Ember.Component.extend({
         var newY = parseInt(id.charAt(3));
 
         if (game.turn === game.playerRed) {
-          //if new (red) is up and left from original
-          if (newY === (startY - 2) && newX === (startX - 2)) {
-            valid = true;
-          } //else if new (red) is up and right from original
-          else if (newY === (startY - 2) && newX === (startX + 2)) {
-            valid = true;
+          if (game.board[idToIndex(game.startPosition)].value === 'red-reg') {
+            //if new (red) is up and left from original
+            if (newY === (startY - 2) && newX === (startX - 2)) {
+              valid = true;
+            } //else if new (red) is up and right from original
+            else if (newY === (startY - 2) && newX === (startX + 2)) {
+              valid = true;
+            }
+          } else if (game.board[idToIndex(game.startPosition)].value === 'red-king') {
+            //if new (red) is up and left from original
+            if (newY === (startY - 2) && newX === (startX - 2)) {
+              valid = true;
+            } //else if new (red) is up and right from original
+            else if (newY === (startY - 2) && newX === (startX + 2)) {
+              valid = true;
+            }
+            else if (newY === (startY + 2) && newX === (startX - 2)) {
+              valid = true;
+            }
+            else if (newY === (startY + 2) && newX === (startX + 2)) {
+              valid = true;
+            }
           }
         } else { //black turn
-          //if new (black) is up and left from original
-          if (newY === (startY + 2) && newX === (startX - 2)) {
-            valid = true;
-          } //else if new (black) is up and right from original
-          else if (newY === (startY + 2) && newX === (startX + 2)) {
-            valid = true;
+          if (game.board[idToIndex(game.startPosition)].value === 'black-reg') {
+            //if new (black) is up and left from original
+            if (newY === (startY + 2) && newX === (startX - 2)) {
+              valid = true;
+            } //else if new (black) is up and right from original
+            else if (newY === (startY + 2) && newX === (startX + 2)) {
+              valid = true;
+            }
+          } else if (game.board[idToIndex(game.startPosition)].value === 'black-king') {
+            //if new (black) is up and left from original
+            if (newY === (startY + 2) && newX === (startX - 2)) {
+              valid = true;
+            } //else if new (black) is up and right from original
+            else if (newY === (startY + 2) && newX === (startX + 2)) {
+              valid = true;
+            }
+            else if (newY === (startY - 2) && newX === (startX - 2)) {
+              valid = true;
+            } //else if new (black) is up and right from original
+            else if (newY === (startY - 2) && newX === (startX + 2)) {
+              valid = true;
+            }
           }
         }
 
         return valid;
-      }
+      };
 
       var isEnemyBetween = function (id, game) {
         var valid = false;
@@ -299,11 +395,11 @@ export default Ember.Component.extend({
         var enemyX = (startX + newX) / 2;
         var enemyY = (startY + newY) / 2;
         //check for not null and not current player (enemy)
-        if (game.board[CoordinatesToIndex(enemyX, enemyY)].value !== null && game.board[CoordinatesToIndex(enemyX, enemyY)].value !== game.turn) {
+        if (game.board[coordinatesToIndex(enemyX, enemyY)].value !== null && game.board[coordinatesToIndex(enemyX, enemyY)].value !== game.turn) {
           valid = true;
         }
         return valid;
-      }
+      };
 
       var enemyJumpCalcs = function (id, game) {
         var index = -1;
@@ -314,10 +410,10 @@ export default Ember.Component.extend({
         var enemyX = (startX + newX) / 2;
         var enemyY = (startY + newY) / 2;
 
-        index = CoordinatesToIndex(enemyX, enemyY);
+        index = coordinatesToIndex(enemyX, enemyY);
 
         return index;
-      }
+      };
 
       // End: Helper Functions--------------------------------------------------
 
@@ -339,9 +435,17 @@ export default Ember.Component.extend({
           //make move
             //change board array
               //new position filled
-          this.game.board[IdToIndex(id)].value = this.game.board[IdToIndex(this.game.startPosition)].value;
+          if (this.game.turn === this.game.playerRed && !idRedKinged(id)) {
+            this.game.board[idToIndex(id)].value = 'red-reg';
+          } else if(this.game.turn === this.game.playerRed && idRedKinged(id)) {
+            this.game.board[idToIndex(id)].value = 'red-king';
+          } else if (this.game.turn === this.game.playerBlack && !idBlackKinged(id)) {
+            this.game.board[idToIndex(id)].value = 'black-reg';
+          } else if(this.game.turn === this.game.playerBlack && idBlackKinged(id)) {
+            this.game.board[idToIndex(id)].value = 'black-king';
+          }
               //old position null
-          this.game.board[IdToIndex(this.game.startPosition)].value = null;
+          this.game.board[idToIndex(this.game.startPosition)].value = null;
 
           //draw grid changes (place checker at id location and revert pointer to normal)
           placeChecker(id, this.game);
@@ -359,9 +463,17 @@ export default Ember.Component.extend({
           //make move
             //change board array
               //new positition filled
-          this.game.board[IdToIndex(id)].value = this.game.board[IdToIndex(this.game.startPosition)].value;
+          if (this.game.turn === this.game.playerRed && !idRedKinged(id)) {
+            this.game.board[idToIndex(id)].value = 'red-reg';
+          } else if(this.game.turn === this.game.playerRed && idRedKinged(id)) {
+            this.game.board[idToIndex(id)].value = 'red-king';
+          } else if (this.game.turn === this.game.playerBlack && !idBlackKinged(id)) {
+            this.game.board[idToIndex(id)].value = 'black-reg';
+          } else if(this.game.turn === this.game.playerBlack && idBlackKinged(id)) {
+            this.game.board[idToIndex(id)].value = 'black-king';
+          }
               //old position null
-          this.game.board[IdToIndex(this.game.startPosition)].value = null;
+          this.game.board[idToIndex(this.game.startPosition)].value = null;
               //enemy position null
           this.game.board[enemyJumpCalcs(id, this.game)].value = null;
           //draw grid changes (placeholder checker as lightly shaded, keep cursor)
