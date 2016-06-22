@@ -285,13 +285,31 @@ export default Ember.Component.extend({
 
         } else { //black turn
           //if new (black) is up and left from original
-          if (newY === (startY + 1) && newX === (startX - 1)) {
-            valid = true;
-          } //else if new (black) is up and right from original
-          else if (newY === (startY + 1) && newX === (startX + 1)) {
-            valid = true;
+          if (game.board[idToIndex(game.startPosition)].value === 'black-reg') {
+            if (newY === (startY + 1) && newX === (startX - 1)) {
+              valid = true;
+            } //else if new (black) is up and right from original
+            else if (newY === (startY + 1) && newX === (startX + 1)) {
+              valid = true;
+            }
+
+          } else if (game.board[idToIndex(game.startPosition)].value === 'black-king'){
+              if (newY === (startY + 1) && newX === (startX - 1)) {
+                valid = true;
+              } //else if new (black) is up and right from original
+              else if (newY === (startY + 1) && newX === (startX + 1)) {
+                valid = true;
+              }
+              else if (newY === (startY - 1) && newX === (startX + 1)) {
+                valid = true;
+              }
+              else if (newY === (startY - 1) && newX === (startX - 1)) {
+                valid = true;
+              }
+
+            }
           }
-        }
+
         return valid;
       };
 
