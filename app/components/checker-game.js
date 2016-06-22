@@ -17,6 +17,7 @@ export default Ember.Component.extend({
         this.game.playerBlack = this.get('playerBlack');  //username
         this.set('game.turn', this.game.playerRed);  //set to 'username' of playerRed
         this.game.click = 'first';
+        this.game.jumpMove = false;
         this.game.startPosition = null;
         this.game.board = (function() {
           var board = [];
@@ -174,9 +175,9 @@ export default Ember.Component.extend({
       var placeChecker = function (id, game) {
         //display checker in new position
         if (game.board[IdToIndex(id)].value === 'red-reg') {
-          Ember.$('#' + id).append("<img src='assets/images/circle-red.png' class='checker'/>");
+          Ember.$('#' + id).html(IdToTablePrint(id) + "<img src='assets/images/circle-red.png' class='checker'/>");
         } else if (game.board[IdToIndex(id)].value === 'black-reg') {
-          Ember.$('#' + id).append("<img src='assets/images/circle-black.png' class='checker'/>");
+          Ember.$('#' + id).html(IdToTablePrint(id) + "<img src='assets/images/circle-black.png' class='checker'/>");
         }
         //cursor back to normal
         //change pointer to match user turn
@@ -187,8 +188,21 @@ export default Ember.Component.extend({
         }
       }
 
+      //"place" placeholder checker at id location and rever pointer to normal
+      var placePlaceholder = function (id, game) {
+        //delete checker in start position
+        Ember.$('#' + game.startPosition).html(IdToTablePrint(game.startPosition));
+
+        //display checker in new position
+        if (game.board[IdToIndex(id)].value === 'red-reg') {
+          Ember.$('#' + id).html(IdToTablePrint(id) + "<img src='assets/images/circle-red.png' class='checker' style='opacity: 0.5'/>");
+        } else if (game.board[IdToIndex(id)].value === 'black-reg') {
+          Ember.$('#' + id).html(IdToTablePrint(id) + "<img src='assets/images/circle-black.png' class='checker' style='opacity: 0.5'/>");
+        }
+      }
+
       //"remove" checker at id location and rever pointer to normal
-      var removeChecker = function (id, game) {
+      var removeEnemyChecker = function (id, game) {
         var enemyIndex = -1;
         var enemyId = "";
 
@@ -321,7 +335,7 @@ export default Ember.Component.extend({
           this.game.startPosition = id;
         }
         //else second click and valid move (empty spot)
-        else if (this.game.click === 'second' && validSecondChecker(id, this.game)) {
+        else if (this.game.click === 'second' && validSecondChecker(id, this.game) && this.game.jumpMove === false) {
           //make move
             //change board array
               //new position filled
@@ -339,9 +353,9 @@ export default Ember.Component.extend({
             this.set('game.turn', this.game.playerRed);
           }
           this.game.click = 'first';
+        }
         //else second click and kill move (empty spot & jump over enemy)
-        } else if (this.game.click === 'second' && validJumpMove(id, this.game)) {
-          console.log("Jump Move!");
+        else if (this.game.click === 'second' && validJumpMove(id, this.game)) {
           //make move
             //change board array
               //new positition filled
@@ -351,19 +365,39 @@ export default Ember.Component.extend({
               //enemy position null
           this.game.board[enemyJumpCalcs(id, this.game)].value = null;
           //draw grid changes (placeholder checker as lightly shaded, keep cursor)
-          placeChecker(id, this.game);
+          placePlaceholder(id, this.game);
           //draw grid changes (removeEnemyChecker)
-          removeChecker(id, this.game);
+          removeEnemyChecker(id, this.game);
 
-          //todo: will need to add variable called "jumpMove" to indicate that further logic will be for jump move (can only continue to move this piece, and setting piece back down to where it is will cause turn to increment)
-
+          //"jumpMove" to indicate that further logic will be for jump move (can only continue to move this piece, and setting piece back down to where it is will cause turn to increment)
+          this.game.jumpMove = true;
+          //new start position to indicate where new position is
+          this.game.startPosition = id;
           //don't increment click or turn
 
-        } else if (this.game.click === 'second' && id === this.game.startPosition) { //if placed back at original position
+        }
+        //else if second click and not a jump move
+        else if (this.game.click === 'second' && id === this.game.startPosition && this.game.jumpMove === false) { //if placed back at original position
           //place checker back down
           placeChecker(id, this.game);
           //back to first click status
           this.game.click = 'first';
+        }
+        //else if in a jump move and second click
+        else if (this.game.click === 'second' && id === this.game.startPosition && this.game.jumpMove === true) { //if placed back at original position and in the middle of a jump move
+          //place checker back down
+          placeChecker(id, this.game);
+          //increment turn && click
+          if(this.game.turn === this.game.playerRed) {
+            this.set('game.turn', this.game.playerBlack);
+          } else {
+            this.set('game.turn', this.game.playerRed);
+          }
+          //back to first click status
+          this.game.click = 'first';
+          //not a jump move
+          this.game.jumpMove = false;
+
         } else {
           //don't do anything
         }
