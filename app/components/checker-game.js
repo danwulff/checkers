@@ -132,6 +132,12 @@ export default Ember.Component.extend({
         return x + (y*8);
       };
 
+      var IdToTablePrint = function (id) {
+        var x = id.charAt(1);
+        var y = id.charAt(3);
+        return x + "," + y;
+      }
+
       //coordinates to id
       var coordinatesToId = function (x, y) {
         return "x" + x + "y" + y;
@@ -146,7 +152,7 @@ export default Ember.Component.extend({
       //"pick up" checker from location, change pointer to indicate "pick up"
       var pickUpChecker = function (id, game) {
         //remove image from grid
-        Ember.$('#' + id).html(id); //todo: remove 'id' from html() eventually
+        Ember.$('#' + id).html(IdToTablePrint(id)); //todo: remove 'id' from html() eventually
 
         //change pointer to match user turn
         if (game.turn === game.playerRed) {
