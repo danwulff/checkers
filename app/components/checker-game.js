@@ -292,7 +292,6 @@ export default Ember.Component.extend({
             else if (newY === (startY + 1) && newX === (startX + 1)) {
               valid = true;
             }
-
           } else if (game.board[idToIndex(game.startPosition)].value === 'black-king'){
               if (newY === (startY + 1) && newX === (startX - 1)) {
                 valid = true;
@@ -306,10 +305,8 @@ export default Ember.Component.extend({
               else if (newY === (startY - 1) && newX === (startX - 1)) {
                 valid = true;
               }
-
             }
           }
-
         return valid;
       };
 
@@ -321,20 +318,52 @@ export default Ember.Component.extend({
         var newY = parseInt(id.charAt(3));
 
         if (game.turn === game.playerRed) {
-          //if new (red) is up and left from original
-          if (newY === (startY - 2) && newX === (startX - 2)) {
-            valid = true;
-          } //else if new (red) is up and right from original
-          else if (newY === (startY - 2) && newX === (startX + 2)) {
-            valid = true;
+          if (game.board[idToIndex(game.startPosition)].value === 'red-reg') {
+            //if new (red) is up and left from original
+            if (newY === (startY - 2) && newX === (startX - 2)) {
+              valid = true;
+            } //else if new (red) is up and right from original
+            else if (newY === (startY - 2) && newX === (startX + 2)) {
+              valid = true;
+            }
+          } else if (game.board[idToIndex(game.startPosition)].value === 'red-king') {
+            //if new (red) is up and left from original
+            if (newY === (startY - 2) && newX === (startX - 2)) {
+              valid = true;
+            } //else if new (red) is up and right from original
+            else if (newY === (startY - 2) && newX === (startX + 2)) {
+              valid = true;
+            }
+            else if (newY === (startY + 2) && newX === (startX - 2)) {
+              valid = true;
+            }
+            else if (newY === (startY + 2) && newX === (startX + 2)) {
+              valid = true;
+            }
           }
         } else { //black turn
-          //if new (black) is up and left from original
-          if (newY === (startY + 2) && newX === (startX - 2)) {
-            valid = true;
-          } //else if new (black) is up and right from original
-          else if (newY === (startY + 2) && newX === (startX + 2)) {
-            valid = true;
+          if (game.board[idToIndex(game.startPosition)].value === 'black-reg') {
+            //if new (black) is up and left from original
+            if (newY === (startY + 2) && newX === (startX - 2)) {
+              valid = true;
+            } //else if new (black) is up and right from original
+            else if (newY === (startY + 2) && newX === (startX + 2)) {
+              valid = true;
+            }
+          } else if (game.board[idToIndex(game.startPosition)].value === 'black-king') {
+            //if new (black) is up and left from original
+            if (newY === (startY + 2) && newX === (startX - 2)) {
+              valid = true;
+            } //else if new (black) is up and right from original
+            else if (newY === (startY + 2) && newX === (startX + 2)) {
+              valid = true;
+            }
+            else if (newY === (startY - 2) && newX === (startX - 2)) {
+              valid = true;
+            } //else if new (black) is up and right from original
+            else if (newY === (startY - 2) && newX === (startX + 2)) {
+              valid = true;
+            }
           }
         }
 
