@@ -52,7 +52,7 @@ export default Ember.Component.extend({
           board[20] = {x: 4, y: 2, value: null};
           board[21] = {x: 5, y: 2, value: 'black-reg'};
           board[22] = {x: 6, y: 2, value: null};
-          board[23] = {x: 7, y: 2, value: 'black-king'};
+          board[23] = {x: 7, y: 2, value: 'black-reg'};
           //row 3
           board[24] = {x: 0, y: 3, value: null};
           board[25] = {x: 1, y: 3, value: null};
@@ -72,7 +72,7 @@ export default Ember.Component.extend({
           board[38] = {x: 6, y: 4, value: null};
           board[39] = {x: 7, y: 4, value: null};
           //row 5
-          board[40] = {x: 0, y: 5, value: 'red-king'};
+          board[40] = {x: 0, y: 5, value: 'red-reg'};
           board[41] = {x: 1, y: 5, value: null};
           board[42] = {x: 2, y: 5, value: 'red-reg'};
           board[43] = {x: 3, y: 5, value: null};
