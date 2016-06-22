@@ -161,6 +161,22 @@ export default Ember.Component.extend({
         return x + "," + y;
       };
 
+      //need to check if red got to y=0 for king
+      var idRedKinged = function (id) {
+        var valid = false;
+        var y = parseInt(id.charAt(3));
+        if (y === 0) valid = true;
+        return valid;
+      };
+
+      //need to check if black got to y=7 for king
+      var idBlackKinged = function (id) {
+        var valid = false;
+        var y = parseInt(id.charAt(3));
+        if (y === 7) valid = true;
+        return valid;
+      };
+
       //check for valid first click (clicked a checker that belongs to current turn)
       var validFirstChecker = function (id, game) {
         var valid = ((game.board[idToIndex(id)].value === 'red-reg' || game.board[idToIndex(id)].value === 'red-king') && (game.turn === game.playerRed)) || ((game.board[idToIndex(id)].value === 'black-reg' || game.board[idToIndex(id)].value === 'black-king') && (game.turn === game.playerBlack));
@@ -419,7 +435,15 @@ export default Ember.Component.extend({
           //make move
             //change board array
               //new position filled
-          this.game.board[idToIndex(id)].value = this.game.board[idToIndex(this.game.startPosition)].value;
+          if (this.game.turn === this.game.playerRed && !idRedKinged(id)) {
+            this.game.board[idToIndex(id)].value = 'red-reg';
+          } else if(this.game.turn === this.game.playerRed && idRedKinged(id)) {
+            this.game.board[idToIndex(id)].value = 'red-king';
+          } else if (this.game.turn === this.game.playerBlack && !idBlackKinged(id)) {
+            this.game.board[idToIndex(id)].value = 'black-reg';
+          } else if(this.game.turn === this.game.playerBlack && idBlackKinged(id)) {
+            this.game.board[idToIndex(id)].value = 'black-king';
+          }
               //old position null
           this.game.board[idToIndex(this.game.startPosition)].value = null;
 
@@ -439,7 +463,15 @@ export default Ember.Component.extend({
           //make move
             //change board array
               //new positition filled
-          this.game.board[idToIndex(id)].value = this.game.board[idToIndex(this.game.startPosition)].value;
+          if (this.game.turn === this.game.playerRed && !idRedKinged(id)) {
+            this.game.board[idToIndex(id)].value = 'red-reg';
+          } else if(this.game.turn === this.game.playerRed && idRedKinged(id)) {
+            this.game.board[idToIndex(id)].value = 'red-king';
+          } else if (this.game.turn === this.game.playerBlack && !idBlackKinged(id)) {
+            this.game.board[idToIndex(id)].value = 'black-reg';
+          } else if(this.game.turn === this.game.playerBlack && idBlackKinged(id)) {
+            this.game.board[idToIndex(id)].value = 'black-king';
+          }
               //old position null
           this.game.board[idToIndex(this.game.startPosition)].value = null;
               //enemy position null
