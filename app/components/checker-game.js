@@ -132,11 +132,24 @@ export default Ember.Component.extend({
         return x + (y*8);
       };
 
+      //change incoming coordinates (from click action) to array value for board
+      var CoordinatesToIndex = function (x, y) {
+        //x0y0 -> 0, x1y0 -> 1, x0y1 -> 8
+        return x + (y*8);
+      };
+
+      var IndexToId = function (index) {
+        var x = index % 8;
+        var y = Math.floor(index / 8);
+
+        return "x" + x + "y" + y;
+      }
+
       var IdToTablePrint = function (id) {
         var x = id.charAt(1);
         var y = id.charAt(3);
         return x + "," + y;
-      }
+      };
 
       //check for valid first click (clicked a checker that belongs to current turn)
       var validFirstChecker = function (id, game) {
@@ -174,6 +187,18 @@ export default Ember.Component.extend({
         }
       }
 
+      //"remove" checker at id location and rever pointer to normal
+      var removeChecker = function (id, game) {
+        var enemyIndex = -1;
+        var enemyId = "";
+
+        enemyIndex = enemyJumpCalcs(id, game);
+        enemyId = IndexToId(enemyIndex);
+
+        //remove enemy checker
+        Ember.$('#' + enemyId).html(IdToTablePrint(enemyId));
+      }
+
       //check for valid first click (clicked a checker that belongs to current turn)
       var validSecondChecker = function (id, game) {
         var valid = false;
@@ -185,6 +210,16 @@ export default Ember.Component.extend({
 
         return valid; //true or false
       };
+
+      //check for valid jump move
+      var validJumpMove = function (id, game) {
+        var valid = false;
+        //if blank and one over and enemy in between
+        if (game.board[IdToIndex(id)].value === null && isOneOver(id, game) && isEnemyBetween(id, game)) {
+          valid = true;
+        }
+        return valid;
+      }
 
       var isNearby = function (id, game) {
         var valid = false;
@@ -201,17 +236,74 @@ export default Ember.Component.extend({
           else if (newY === (startY - 1) && newX === (startX + 1)) {
             valid = true;
           }
-        } else {
-          //if new (red) is up and left from original
+        } else { //black turn
+          //if new (black) is up and left from original
           if (newY === (startY + 1) && newX === (startX - 1)) {
             valid = true;
-          } //else if new (red) is up and right from original
+          } //else if new (black) is up and right from original
           else if (newY === (startY + 1) && newX === (startX + 1)) {
             valid = true;
           }
         }
         return valid
       };
+
+      var isOneOver = function (id, game) {
+        var valid = false;
+        var startX = parseInt(game.startPosition.charAt(1));
+        var startY = parseInt(game.startPosition.charAt(3));
+        var newX = parseInt(id.charAt(1));
+        var newY = parseInt(id.charAt(3));
+
+        if (game.turn === game.playerRed) {
+          //if new (red) is up and left from original
+          if (newY === (startY - 2) && newX === (startX - 2)) {
+            valid = true;
+          } //else if new (red) is up and right from original
+          else if (newY === (startY - 2) && newX === (startX + 2)) {
+            valid = true;
+          }
+        } else { //black turn
+          //if new (black) is up and left from original
+          if (newY === (startY + 2) && newX === (startX - 2)) {
+            valid = true;
+          } //else if new (black) is up and right from original
+          else if (newY === (startY + 2) && newX === (startX + 2)) {
+            valid = true;
+          }
+        }
+
+        return valid;
+      }
+
+      var isEnemyBetween = function (id, game) {
+        var valid = false;
+        var startX = parseInt(game.startPosition.charAt(1));
+        var startY = parseInt(game.startPosition.charAt(3));
+        var newX = parseInt(id.charAt(1));
+        var newY = parseInt(id.charAt(3));
+        var enemyX = (startX + newX) / 2;
+        var enemyY = (startY + newY) / 2;
+        //check for not null and not current player (enemy)
+        if (game.board[CoordinatesToIndex(enemyX, enemyY)].value !== null && game.board[CoordinatesToIndex(enemyX, enemyY)].value !== game.turn) {
+          valid = true;
+        }
+        return valid;
+      }
+
+      var enemyJumpCalcs = function (id, game) {
+        var index = -1;
+        var startX = parseInt(game.startPosition.charAt(1));
+        var startY = parseInt(game.startPosition.charAt(3));
+        var newX = parseInt(id.charAt(1));
+        var newY = parseInt(id.charAt(3));
+        var enemyX = (startX + newX) / 2;
+        var enemyY = (startY + newY) / 2;
+
+        index = CoordinatesToIndex(enemyX, enemyY);
+
+        return index;
+      }
 
       // End: Helper Functions--------------------------------------------------
 
@@ -248,18 +340,20 @@ export default Ember.Component.extend({
           }
           this.game.click = 'first';
         //else second click and kill move (empty spot & jump over enemy)
-        } else if (this.game.click === 'second' && false /*validJumpMove(id, this.game)*/) {
+        } else if (this.game.click === 'second' && validJumpMove(id, this.game)) {
+          console.log("Jump Move!");
           //make move
             //change board array
               //new positition filled
-
+          this.game.board[IdToIndex(id)].value = this.game.board[IdToIndex(this.game.startPosition)].value;
               //old position null
-
+          this.game.board[IdToIndex(this.game.startPosition)].value = null;
               //enemy position null
-
+          this.game.board[enemyJumpCalcs(id, this.game)].value = null;
           //draw grid changes (placeholder checker as lightly shaded, keep cursor)
-
+          placeChecker(id, this.game);
           //draw grid changes (removeEnemyChecker)
+          removeChecker(id, this.game);
 
           //todo: will need to add variable called "jumpMove" to indicate that further logic will be for jump move (can only continue to move this piece, and setting piece back down to where it is will cause turn to increment)
 
