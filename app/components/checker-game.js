@@ -52,7 +52,7 @@ export default Ember.Component.extend({
           board[20] = {x: 4, y: 2, value: null};
           board[21] = {x: 5, y: 2, value: 'black-reg'};
           board[22] = {x: 6, y: 2, value: null};
-          board[23] = {x: 7, y: 2, value: 'black-reg'};
+          board[23] = {x: 7, y: 2, value: 'black-king'};
           //row 3
           board[24] = {x: 0, y: 3, value: null};
           board[25] = {x: 1, y: 3, value: null};
@@ -72,7 +72,7 @@ export default Ember.Component.extend({
           board[38] = {x: 6, y: 4, value: null};
           board[39] = {x: 7, y: 4, value: null};
           //row 5
-          board[40] = {x: 0, y: 5, value: 'red-reg'};
+          board[40] = {x: 0, y: 5, value: 'red-king'};
           board[41] = {x: 1, y: 5, value: null};
           board[42] = {x: 2, y: 5, value: 'red-reg'};
           board[43] = {x: 3, y: 5, value: null};
@@ -110,9 +110,15 @@ export default Ember.Component.extend({
             if (this.game.board [(x + y*8)].value === 'red-reg') {
               //set image
               Ember.$('#' + myId).append("<img src='assets/images/circle-red.png' class='checker'/>");
+            } else if (this.game.board [(x + y*8)].value === 'red-king') {
+              //set image
+              Ember.$('#' + myId).append("<img src='assets/images/king-red.png' class='checker'/>");
             } else if (this.game.board [(x + y*8)].value === 'black-reg') {
               //set image
               Ember.$('#' + myId).append("<img src='assets/images/circle-black.png' class='checker'/>");
+            } else if (this.game.board [(x + y*8)].value === 'black-king') {
+              //set image
+              Ember.$('#' + myId).append("<img src='assets/images/king-black.png' class='checker'/>");
             }
           }
         }
@@ -179,8 +185,12 @@ export default Ember.Component.extend({
         //display checker in new position
         if (game.board[idToIndex(id)].value === 'red-reg') {
           Ember.$('#' + id).html(idToTablePrint(id) + "<img src='assets/images/circle-red.png' class='checker'/>");
+        } else if (game.board[idToIndex(id)].value === 'red-king') {
+          Ember.$('#' + id).html(idToTablePrint(id) + "<img src='assets/images/king-red.png' class='checker'/>");
         } else if (game.board[idToIndex(id)].value === 'black-reg') {
           Ember.$('#' + id).html(idToTablePrint(id) + "<img src='assets/images/circle-black.png' class='checker'/>");
+        } else if (game.board[idToIndex(id)].value === 'black-king') {
+          Ember.$('#' + id).html(idToTablePrint(id) + "<img src='assets/images/king-black.png' class='checker'/>");
         }
         //cursor back to normal
         //change pointer to match user turn
@@ -199,8 +209,12 @@ export default Ember.Component.extend({
         //display checker in new position
         if (game.board[idToIndex(id)].value === 'red-reg') {
           Ember.$('#' + id).html(idToTablePrint(id) + "<img src='assets/images/circle-red.png' class='checker' style='opacity: 0.5'/>");
+        } else if (game.board[idToIndex(id)].value === 'red-king') {
+          Ember.$('#' + id).html(idToTablePrint(id) + "<img src='assets/images/king-red.png' class='checker' style='opacity: 0.5'/>");
         } else if (game.board[idToIndex(id)].value === 'black-reg') {
           Ember.$('#' + id).html(idToTablePrint(id) + "<img src='assets/images/circle-black.png' class='checker' style='opacity: 0.5'/>");
+        } else if (game.board[idToIndex(id)].value === 'black-king') {
+          Ember.$('#' + id).html(idToTablePrint(id) + "<img src='assets/images/king-black.png' class='checker' style='opacity: 0.5'/>");
         }
       };
 
