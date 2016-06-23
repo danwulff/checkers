@@ -16,6 +16,7 @@
 <br>
 
 {{#if game.turn}}
+  {{sound-start}}
   <h4>It's {{game.turn}}'s turn</h4>
 
   {{turn-image game.turn game.playerRed game.playerBlack}}
@@ -26,6 +27,7 @@
 <div id="winner" style="text-align: center"></div>
 
 <div class="board">
+  {{sound-background}}
   <!-- Row 0 -->
   <div class="row">
     <div class="col-xs-2">

@@ -201,6 +201,7 @@ export default Ember.Component.extend({
         //send data to firebase
         firebase.database().ref('games/0').set(this.game);
       }
+
     },
     //End: setupGame()----------------------------------------------------------
 
