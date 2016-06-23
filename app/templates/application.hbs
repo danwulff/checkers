@@ -1,10 +1,22 @@
+<header>
+  <h1>Space Checkers</h1>
+  <nav class="navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li>{{#link-to 'index'}}<span class="glyphicon glyphicon-home"></span> Home{{/link-to}}</li>
+          <li>{{#link-to 'checkers'}}New Game{{/link-to}}</li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li>{{#link-to 'about'}}About{{/link-to}}</li>
+          <li>{{#link-to 'contact'}}Contact{{/link-to}}</li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
 
 <div class="container">
   {{outlet}}
-
-  <br><br>
-  {{#link-to 'index'}}index{{/link-to}}<br>
-  {{#link-to 'checkers'}}checker game{{/link-to}}<br>
-  {{#link-to 'about'}}About{{/link-to}}<br>
-  {{#link-to 'contact'}}Contact{{/link-to}}
 </div>
