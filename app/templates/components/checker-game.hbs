@@ -9,7 +9,12 @@
 
 {{#if game.turn}}
   <h4>It's {{game.turn}}'s turn</h4>
+  <button {{action 'concedeGame'}}>Concede</button>
 {{/if}}
+
+<div id="winner" style="text-align: center">
+
+</div>
 
 <div class="board">
   <!-- Row 0 -->

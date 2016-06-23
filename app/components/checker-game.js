@@ -12,6 +12,17 @@ export default Ember.Component.extend({
   },
   //actions
   actions: {
+    //button action to concede the game
+    concedeGame() {
+      if(this.game.turn === this.game.playerBlack) {
+        Ember.$('#winner').html("<h1>" +this.game.playerRed + " is the winner!</h1>");
+      } else{
+        Ember.$('#winner').html("<h1>" + this.game.playerBlack + " is the winner!</h1>");
+      }
+      this.set('game.turn', null);
+      Ember.$('#startGame').show();
+    },
+
     //setupGame()---------------------------------------------------------------
     setupGame() {
       //if user didn't enter stuff into the new game form
@@ -110,6 +121,8 @@ export default Ember.Component.extend({
         for(var y = 0; y < 8; y++) {
           for (var x = 0; x < 8; x++) {
             var id = 'x' + x + 'y' + y;
+            var prettyPrint = id.charAt(1) + "," + id.charAt(3);
+            Ember.$('#' + id).html(prettyPrint);
             //if board[xy math] === 'checker', append html
             if (this.game.board[(x + y*8)].value === 'red-reg') {
               Ember.$('#' + id).append("<img src='assets/images/circle-red.png' class='checker'/>");
@@ -293,20 +306,20 @@ export default Ember.Component.extend({
             }
           } //if a king checker
           else if (game.board[idToIndex(game.startPosition)].value === 'black-king'){
-              if (newY === (startY + 1) && newX === (startX - 1)) {
-                valid = true;
-              } //else if new (black) is up and right from original
-              else if (newY === (startY + 1) && newX === (startX + 1)) {
-                valid = true;
-              }
-              else if (newY === (startY - 1) && newX === (startX + 1)) {
-                valid = true;
-              }
-              else if (newY === (startY - 1) && newX === (startX - 1)) {
-                valid = true;
-              }
+            if (newY === (startY + 1) && newX === (startX - 1)) {
+              valid = true;
+            } //else if new (black) is up and right from original
+            else if (newY === (startY + 1) && newX === (startX + 1)) {
+              valid = true;
+            }
+            else if (newY === (startY - 1) && newX === (startX + 1)) {
+              valid = true;
+            }
+            else if (newY === (startY - 1) && newX === (startX - 1)) {
+              valid = true;
             }
           }
+        }
         return valid;
       };
       //checks if new position is a proper 'jump' move
@@ -389,6 +402,30 @@ export default Ember.Component.extend({
         index = coordinatesToIndex(enemyX, enemyY);
         return index;
       };
+      //checks for no more checkers on board (for one player)
+      var checkWinner = function (game) {
+        var playerRed = false;
+        var playerBlack = false;
+        //print checker board (in template) through full 8x8 grid
+        for(var y = 0; y < 8; y++) {
+          for (var x = 0; x < 8; x++) {
+            var index = x + (8*y);
+            if (game.board[index].value === 'red-reg' || game.board[index].value === 'red-king') {
+              playerRed = true;
+            } else if (game.board[index].value === 'black-reg' || game.board[index].value === 'black-king') {
+              playerBlack = true;
+            }
+          }
+        }
+        //return winner or null
+        if (playerRed === false) {
+          return game.playerBlack;
+        } else if (playerBlack === false) {
+          return game.playerRed;
+        } else {
+          return null;
+        }
+      };
       // End: Helper Functions--------------------------------------------------
 
       // Game Logic-------------------------------------------------------------
@@ -406,21 +443,21 @@ export default Ember.Component.extend({
         //else second click and valid move (empty spot)
         else if (this.game.click === 'second' && validCheckerMove(id, this.game) && this.game.jumpMove === false) {
           //make move
-            //change board array
-              //new position filled
-        if (this.game.turn === this.game.playerRed && !idRedKinged(id) && this.game.board[idToIndex(this.game.startPosition)].value !== 'red-king') {
-          this.game.board[idToIndex(id)].value = 'red-reg';
-        }
-        else if(this.game.turn === this.game.playerRed && idRedKinged(id) || this.game.board[idToIndex(this.game.startPosition)].value === 'red-king') {
-          this.game.board[idToIndex(id)].value = 'red-king';
-        }
-        else if (this.game.turn === this.game.playerBlack && !idBlackKinged(id) && this.game.board[idToIndex(this.game.startPosition)].value !== 'black-king') {
-          this.game.board[idToIndex(id)].value = 'black-reg';
-        }
-        else if(this.game.turn === this.game.playerBlack && idBlackKinged(id)  || this.game.board[idToIndex(this.game.startPosition)].value === 'black-king') {
-          this.game.board[idToIndex(id)].value = 'black-king';
-        }
-              //old position null
+          //change board array
+          //new position filled
+          if (this.game.turn === this.game.playerRed && !idRedKinged(id) && this.game.board[idToIndex(this.game.startPosition)].value !== 'red-king') {
+            this.game.board[idToIndex(id)].value = 'red-reg';
+          }
+          else if(this.game.turn === this.game.playerRed && idRedKinged(id) || this.game.board[idToIndex(this.game.startPosition)].value === 'red-king') {
+            this.game.board[idToIndex(id)].value = 'red-king';
+          }
+          else if (this.game.turn === this.game.playerBlack && !idBlackKinged(id) && this.game.board[idToIndex(this.game.startPosition)].value !== 'black-king') {
+            this.game.board[idToIndex(id)].value = 'black-reg';
+          }
+          else if(this.game.turn === this.game.playerBlack && idBlackKinged(id)  || this.game.board[idToIndex(this.game.startPosition)].value === 'black-king') {
+            this.game.board[idToIndex(id)].value = 'black-king';
+          }
+          //old position null
           this.game.board[idToIndex(this.game.startPosition)].value = null;
 
           //draw grid changes (place checker at id location and revert pointer to normal)
@@ -437,8 +474,8 @@ export default Ember.Component.extend({
         //else second click and kill move (empty spot & jump over enemy)
         else if (this.game.click === 'second' && validJumpMove(id, this.game)) {
           //make move
-            //change board array
-              //new positition filled
+          //change board array
+          //new positition filled
           if (this.game.turn === this.game.playerRed && !idRedKinged(id) && this.game.board[idToIndex(this.game.startPosition)].value !== 'red-king') {
             this.game.board[idToIndex(id)].value = 'red-reg';
           }
@@ -451,9 +488,9 @@ export default Ember.Component.extend({
           else if(this.game.turn === this.game.playerBlack && idBlackKinged(id)  || this.game.board[idToIndex(this.game.startPosition)].value === 'black-king') {
             this.game.board[idToIndex(id)].value = 'black-king';
           }
-              //old position null
+          //old position null
           this.game.board[idToIndex(this.game.startPosition)].value = null;
-              //enemy position null
+          //enemy position null
           this.game.board[enemyJumpCalcs(id, this.game)].value = null;
           //draw grid changes (placeholder checker as lightly shaded, keep cursor)
           placePlaceholder(id, this.game);
@@ -490,13 +527,26 @@ export default Ember.Component.extend({
           this.game.jumpMove = false;
 
         } else { //don't do anything
-        }
       }
-      else { //else don't do anything
+      //check winner every click
+      var winner = checkWinner(this.game);
+      if (winner === this.game.playerRed) {
+        Ember.$('#winner').html("<h1>" +this.game.playerRed + " is the winner!</h1>");
+        this.set('game.turn', null);
+        Ember.$('#startGame').show();
+      } else if (winner === this.game.playerBlack) {
+        Ember.$('#winner').html("<h1>" + this.game.playerBlack + " is the winner!</h1>");
+        this.set('game.turn', null);
+        Ember.$('#startGame').show();
+      } else {
+        //do nothing if no winner
       }
-      // End: Game Logic--------------------------------------------------------
     }
-    // End: Player Click--------------------------------------------------------
+    else { //else don't do anything
   }
-  //End: actions
+  // End: Game Logic--------------------------------------------------------
+}
+// End: Player Click--------------------------------------------------------
+}
+//End: actions
 });
