@@ -50,6 +50,8 @@ export default Ember.Component.extend({
       } else if (self.game.winner === self.game.playerBlack) {
         Ember.$('#winner').html("<h1>" + self.game.playerBlack + " is the winner!</h1>");
         Ember.$('#startGame').show();
+      } else {
+        Ember.$('#winner').html("");
       }
     });
   },
