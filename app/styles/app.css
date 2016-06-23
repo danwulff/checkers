@@ -71,7 +71,7 @@ header h1{
  }
 
 header {
-  background-image: url(http://www.pentadact.com/wp-content/Distance-Header.png);
+  background-image: url('header-banner.png');
   background-size: cover;
  }
 
