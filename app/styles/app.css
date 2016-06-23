@@ -1,7 +1,12 @@
 body {
   /*color: white;
   background-color: #4d4d4d;*/
+  /*background-image: url('/assets/images/about_background.jpeg');*/
 }
+
+/*.background_about {
+  background-image: url('/assets/images/about_background.jpeg');
+}*/
 
 .board {
   color: white;
@@ -48,6 +53,39 @@ body {
   margin-bottom: 50px;
   padding-top: 50px;
   padding-bottom: 50px;
+  border: 1px black solid;
+  border-radius: 15px;
+  box-shadow: 10px 10px 5px #888888;
+  background-color: #d9d9d9
+}
+
+.bioContainer2 {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding-top: 50px;
+  padding-bottom: 70px;
+  border: 1px black solid;
+  border-radius: 15px;
+  box-shadow: 10px 10px 5px #888888;
+  background-color: #d9d9d9
+}
+
+.bioContainer3 {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding-top: 50px;
+  padding-bottom: 90px;
+  border: 1px black solid;
+  border-radius: 15px;
+  box-shadow: 10px 10px 5px #888888;
+  background-color: #d9d9d9
+}
+
+.bioContainer4 {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding-top: 50px;
+  padding-bottom: 70px;
   border: 1px black solid;
   border-radius: 15px;
   box-shadow: 10px 10px 5px #888888;
