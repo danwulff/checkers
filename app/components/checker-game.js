@@ -583,6 +583,8 @@ export default Ember.Component.extend({
         } else {
           //do nothing if no winner
         }
+        //send data to firebase
+        firebase.database().ref('games/0').set(this.game);
       }
       // End: Game Logic--------------------------------------------------------
     }
