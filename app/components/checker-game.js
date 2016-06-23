@@ -46,7 +46,6 @@ export default Ember.Component.extend({
         }
       }
 
-
       if (self.game.winner === self.game.playerRed) {
         Ember.$('#winner').html("<h1>" + self.game.playerRed + " is the winner!</h1>");
         Ember.$('#startGame').show();
@@ -55,6 +54,7 @@ export default Ember.Component.extend({
         Ember.$('#startGame').show();
       } else {
         Ember.$('#winner').html("");
+        Ember.$('#startGame').hide();
       }
     });
   },
