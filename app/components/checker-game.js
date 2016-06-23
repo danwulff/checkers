@@ -526,27 +526,24 @@ export default Ember.Component.extend({
           //not a jump move
           this.game.jumpMove = false;
 
-        } else { //don't do anything
+        } else { /*don't do anything*/}
+        //check winner every click
+        var winner = checkWinner(this.game);
+        if (winner === this.game.playerRed) {
+          Ember.$('#winner').html("<h1>" +this.game.playerRed + " is the winner!</h1>");
+          this.set('game.turn', null);
+          Ember.$('#startGame').show();
+        } else if (winner === this.game.playerBlack) {
+          Ember.$('#winner').html("<h1>" + this.game.playerBlack + " is the winner!</h1>");
+          this.set('game.turn', null);
+          Ember.$('#startGame').show();
+        } else {
+          //do nothing if no winner
+        }
       }
-      //check winner every click
-      var winner = checkWinner(this.game);
-      if (winner === this.game.playerRed) {
-        Ember.$('#winner').html("<h1>" +this.game.playerRed + " is the winner!</h1>");
-        this.set('game.turn', null);
-        Ember.$('#startGame').show();
-      } else if (winner === this.game.playerBlack) {
-        Ember.$('#winner').html("<h1>" + this.game.playerBlack + " is the winner!</h1>");
-        this.set('game.turn', null);
-        Ember.$('#startGame').show();
-      } else {
-        //do nothing if no winner
-      }
+      // End: Game Logic--------------------------------------------------------
     }
-    else { //else don't do anything
+    // End: Player Click--------------------------------------------------------
   }
-  // End: Game Logic--------------------------------------------------------
-}
-// End: Player Click--------------------------------------------------------
-}
-//End: actions
+  //End: actions
 });
