@@ -165,7 +165,7 @@ export default Ember.Component.extend({
       var idRedKinged = function (id) {
         var valid = false;
         var y = parseInt(id.charAt(3));
-        if (y === 0) valid = true;
+        if (y === 0) {valid = true;}
         return valid;
       };
 
@@ -173,7 +173,7 @@ export default Ember.Component.extend({
       var idBlackKinged = function (id) {
         var valid = false;
         var y = parseInt(id.charAt(3));
-        if (y === 7) valid = true;
+        if (y === 7) {valid = true;}
         return valid;
       };
 
@@ -424,12 +424,7 @@ export default Ember.Component.extend({
 
       // End: Helper Functions--------------------------------------------------
 
-      //sound Effects for game functions
-        var newGame = new Audio('../assets/sound-effects/newGame.mp3');
-        var move = new Audio('../assets/sound-effects/checker.png');
-        var killEnemy = new Audio('assets/sound-effects/enemyKill.mp3');
-        var becomeKing = new Audio('assets/sound-effects/king.mp3');
-        var playerWin = new Audio('assets/sound-effects/winner.mp3');
+
       // Game Logic-------------------------------------------------------------
       //if game started
       if (this.game.turn !== null) {
@@ -437,7 +432,6 @@ export default Ember.Component.extend({
         if(this.game.click === 'first' &&  validFirstChecker(id, this.game)) {
           //change pointer
           pickUpChecker(id, this.game);
-           move.play();
           //change 'click' to second click
           this.game.click = 'second';
           //save original position
