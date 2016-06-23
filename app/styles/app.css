@@ -74,3 +74,8 @@ header {
   background-image: url(http://www.pentadact.com/wp-content/Distance-Header.png);
   background-size: cover;
  }
+
+ #checker-rules li {
+  text-align: justify;
+  line-height: 35px;
+ }
