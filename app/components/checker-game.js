@@ -365,7 +365,7 @@ export default Ember.Component.extend({
         var newY = parseInt(id.charAt(3));
         var enemyX = (startX + newX) / 2;
         var enemyY = (startY + newY) / 2;
-        //if playerRed turn, and enemy spot is not a red checker
+        //if playerRed turn, and enemy spot is not a black checker
         if(game.turn === game.playerRed) {
           if (game.board[coordinatesToIndex(enemyX, enemyY)].value === 'black-reg' || game.board[coordinatesToIndex(enemyX, enemyY)].value === 'black-king') {
             valid = true;
