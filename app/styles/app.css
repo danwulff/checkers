@@ -98,4 +98,22 @@ body {
 
 #x1y0, #x3y0, #x5y0, #x7y0, #x0y1, #x2y1, #x4y1, #x6y1, #x1y2, #x3y2, #x5y2, #x7y2, #x0y3, #x2y3, #x4y3, #x6y3, #x1y4, #x3y4, #x5y4, #x7y4, #x0y5, #x2y5, #x4y5, #x6y5, #x1y6, #x3y6, #x5y6, #x7y6, #x0y7, #x2y7, #x4y7, #x6y7 {
   background-image: url('gray.png');
+}
+
+header h1{
+  text-align: center;
+  font-family: monospace;
+  color: red;
+  padding-top: 40px;
+  padding-bottom: 40px;
+ }
+
+header {
+  background-image: url(http://www.pentadact.com/wp-content/Distance-Header.png);
+  background-size: cover;
+ }
+
+ #checker-rules li {
+  text-align: justify;
+  line-height: 35px;
  }
