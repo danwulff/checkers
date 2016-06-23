@@ -1,6 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
+  //Game Data-------------------------------------------------------------------
   game: {
     playerRed: null,  //username of red player
     playerBlack: null,
@@ -10,6 +11,46 @@ export default Ember.Component.extend({
     startPosition: null,  //id of position of checker origin
     board: [] //array of EVERYTHING
   },
+  //End: Game Data--------------------------------------------------------------
+
+  //FIREBASE!!!!!---------------------------------------------------------------
+  didRender() {
+    firebase.database().ref('games/0').on('value', function(snapshot) {
+      //get game data from firebase
+      var tempGame = snapshot.val();
+      //overwrite game data
+      this.game = tempGame;
+      //function that draws new board
+      //print checker board (in template) through full 8x8 grid
+      for(var y = 0; y < 8; y++) {
+        for (var x = 0; x < 8; x++) {
+          var id = 'x' + x + 'y' + y;
+          var prettyPrint = id.charAt(1) + "," + id.charAt(3);
+          Ember.$('#' + id).html(prettyPrint);
+          //if board[xy math] === 'checker', append html
+          if (this.game.board[(x + y*8)].value === 'red-reg') {
+            Ember.$('#' + id).append("<img src='assets/images/circle-red.png' class='checker'/>");
+          } else if (this.game.board[(x + y*8)].value === 'red-king') {
+            Ember.$('#' + id).append("<img src='assets/images/king-red.png' class='checker'/>");
+          } else if (this.game.board[(x + y*8)].value === 'black-reg') {
+            Ember.$('#' + id).append("<img src='assets/images/circle-black.png' class='checker'/>");
+          } else if (this.game.board[(x + y*8)].value === 'black-king') {
+            Ember.$('#' + id).append("<img src='assets/images/king-black.png' class='checker'/>");
+          }
+        }
+      }
+      if(this.game.board !== null) {
+        //hide start game input form
+        Ember.$('#startGame').hide();
+      }
+    });
+  },
+
+  willDestroyElement() {
+    firebase.database().ref('games/0').off('value');
+  },
+  //End: FIREBASE!!!!!----------------------------------------------------------
+
   //actions
   actions: {
     //button action to concede the game
@@ -137,6 +178,8 @@ export default Ember.Component.extend({
         }
         //hide start game input form
         Ember.$('#startGame').hide();
+        //send data to firebase
+        firebase.database().ref('games/0').set(this.game);
       }
     },
     //End: setupGame()----------------------------------------------------------
