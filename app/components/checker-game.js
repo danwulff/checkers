@@ -9,6 +9,7 @@ export default Ember.Component.extend({
     click: null,     //'first' or 'second'
     jumpMove: null,  //false or true
     startPosition: null,  //id of position of checker origin
+    gamewinner: null,
     board: [] //array of EVERYTHING
   },
   //End: Game Data--------------------------------------------------------------
@@ -43,6 +44,13 @@ export default Ember.Component.extend({
         //hide start game input form
         Ember.$('#startGame').hide();
       }
+      if (self.game.winner === self.game.playerRed) {
+        Ember.$('#winner').html("<h1>" + self.game.playerRed + " is the winner!</h1>");
+        Ember.$('#startGame').show();
+      } else if (self.game.winner === self.game.playerBlack) {
+        Ember.$('#winner').html("<h1>" + self.game.playerBlack + " is the winner!</h1>");
+        Ember.$('#startGame').show();
+      }
     });
   },
 
@@ -56,11 +64,15 @@ export default Ember.Component.extend({
     //button action to concede the game
     concedeGame() {
       if(this.game.turn === this.game.playerBlack) {
+        this.game.winner = this.game.playerRed;
         Ember.$('#winner').html("<h1>" +this.game.playerRed + " is the winner!</h1>");
       } else{
+        this.game.winner = this.game.playerBlack;
         Ember.$('#winner').html("<h1>" + this.game.playerBlack + " is the winner!</h1>");
       }
       this.set('game.turn', '');
+      //send concede to firebase
+      firebase.database().ref('games/0').set(this.game);
       Ember.$('#startGame').show();
     },
 
@@ -78,6 +90,7 @@ export default Ember.Component.extend({
         this.game.click = 'first';        //set to 'first' click
         this.game.jumpMove = false;       //set to not in the middle of a jump move
         this.game.startPosition = '';   //no previous position for checker move
+        this.game.winner = '';
         this.game.board = (function() {   //setup game board
           var board = [];
           //coordinates of 8x8 board, starting at top right
@@ -176,7 +189,7 @@ export default Ember.Component.extend({
             }
           }
         }
-        //revert winner stuff
+        //revert winner banner
         Ember.$('#winner').html("");
         //hide start game input form
         Ember.$('#startGame').hide();
@@ -575,10 +588,12 @@ export default Ember.Component.extend({
         //check winner every click
         var winner = checkWinner(this.game);
         if (winner === this.game.playerRed) {
+          this.game.winner = this.game.playerRed;
           Ember.$('#winner').html("<h1>" +this.game.playerRed + " is the winner!</h1>");
           this.set('game.turn', '');
           Ember.$('#startGame').show();
         } else if (winner === this.game.playerBlack) {
+          this.game.winner = this.game.playerBlack;
           Ember.$('#winner').html("<h1>" + this.game.playerBlack + " is the winner!</h1>");
           this.set('game.turn', '');
           Ember.$('#startGame').show();
