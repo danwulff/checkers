@@ -138,6 +138,7 @@ export default Ember.Component.extend({
         //hide start game input form
         Ember.$('#startGame').hide();
       }
+
     },
     //End: setupGame()----------------------------------------------------------
 
