@@ -367,11 +367,11 @@ export default Ember.Component.extend({
         var enemyY = (startY + newY) / 2;
         //if playerRed turn, and enemy spot is not a red checker
         if(game.turn === game.playerRed) {
-          if (game.board[coordinatesToIndex(enemyX, enemyY)].value !== null && (game.board[coordinatesToIndex(enemyX, enemyY)].value !== 'red-reg' && game.board[coordinatesToIndex(enemyX, enemyY)].value !== 'red-king')) {
+          if (game.board[coordinatesToIndex(enemyX, enemyY)].value === 'black-reg' || game.board[coordinatesToIndex(enemyX, enemyY)].value === 'black-king') {
             valid = true;
           }
         } else {
-          if (game.board[coordinatesToIndex(enemyX, enemyY)].value !== null && (game.board[coordinatesToIndex(enemyX, enemyY)].value !== 'black-reg' && game.board[coordinatesToIndex(enemyX, enemyY)].value !== 'black-king')) {
+          if (game.board[coordinatesToIndex(enemyX, enemyY)].value === 'red-reg' || game.board[coordinatesToIndex(enemyX, enemyY)].value === 'red-king') {
             valid = true;
           }
         }
