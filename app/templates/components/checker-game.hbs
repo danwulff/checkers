@@ -17,12 +17,13 @@
 
 {{#if game.turn}}
   <h4>It's {{game.turn}}'s turn</h4>
-  <button {{action 'concedeGame'}}>Concede</button>
+
+  {{turn-image game.turn game.playerRed game.playerBlack}}
+
+  <button {{action 'concedeGame'}} class="btn btn-warning">Concede</button>
 {{/if}}
 
-<div id="winner" style="text-align: center">
-
-</div>
+<div id="winner" style="text-align: center"></div>
 
 <div class="board">
   <!-- Row 0 -->
