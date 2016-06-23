@@ -21,29 +21,32 @@ export default Ember.Component.extend({
     firebase.database().ref('games/0').on('value', function(snapshot) {
       //get game data from firebase
       self.set('game', snapshot.val());
-      //function that draws new board
-      //print checker board (in template) through full 8x8 grid
-      for(var y = 0; y < 8; y++) {
-        for (var x = 0; x < 8; x++) {
-          var id = 'x' + x + 'y' + y;
-          var prettyPrint = id.charAt(1) + "," + id.charAt(3);
-          Ember.$('#' + id).html(prettyPrint);
-          //if board[xy math] === 'checker', append html
-          if (self.game.board[(x + y*8)].value === 'red-reg') {
-            Ember.$('#' + id).append("<img src='assets/images/circle-red.png' class='checker'/>");
-          } else if (self.game.board[(x + y*8)].value === 'red-king') {
-            Ember.$('#' + id).append("<img src='assets/images/king-red.png' class='checker'/>");
-          } else if (self.game.board[(x + y*8)].value === 'black-reg') {
-            Ember.$('#' + id).append("<img src='assets/images/circle-black.png' class='checker'/>");
-          } else if (self.game.board[(x + y*8)].value === 'black-king') {
-            Ember.$('#' + id).append("<img src='assets/images/king-black.png' class='checker'/>");
+
+
+      //to not overwrite opaque tiles when a it's your turn and a jumpMove
+      if(!(self.game.click === 'second' && self.game.jumpMove === true)) {
+        //function that draws new board
+        //print checker board (in template) through full 8x8 grid
+        for(var y = 0; y < 8; y++) {
+          for (var x = 0; x < 8; x++) {
+            var id = 'x' + x + 'y' + y;
+            var prettyPrint = id.charAt(1) + "," + id.charAt(3);
+            Ember.$('#' + id).html(prettyPrint);
+            //if board[xy math] === 'checker', append html
+            if (self.game.board[(x + y*8)].value === 'red-reg') {
+              Ember.$('#' + id).append("<img src='assets/images/circle-red.png' class='checker'/>");
+            } else if (self.game.board[(x + y*8)].value === 'red-king') {
+              Ember.$('#' + id).append("<img src='assets/images/king-red.png' class='checker'/>");
+            } else if (self.game.board[(x + y*8)].value === 'black-reg') {
+              Ember.$('#' + id).append("<img src='assets/images/circle-black.png' class='checker'/>");
+            } else if (self.game.board[(x + y*8)].value === 'black-king') {
+              Ember.$('#' + id).append("<img src='assets/images/king-black.png' class='checker'/>");
+            }
           }
         }
       }
-      if(self.game.board !== null) {
-        //hide start game input form
-        Ember.$('#startGame').hide();
-      }
+
+
       if (self.game.winner === self.game.playerRed) {
         Ember.$('#winner').html("<h1>" + self.game.playerRed + " is the winner!</h1>");
         Ember.$('#startGame').show();
