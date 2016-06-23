@@ -1,7 +1,8 @@
 # Checkers
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+Welcome to our APP! This is the classic game of Checkers but with a space theme. All traditional Western Rules apply and are further explained in the content of the web app itself. This project was created with the EMBER Javascript framework over the course of four days for Epicodus's June Javascript course.
+
+We hope you enjoy and if you have any questions or comments please feel free to contact us at Rlambier46@gmail.com.
 
 ## Prerequisites
 
@@ -19,6 +20,7 @@ You will need the following things properly installed on your computer.
 * change into the new directory
 * `npm install`
 * `bower install`
+
 
 ## Running / Development
 
@@ -51,3 +53,12 @@ Specify what it takes to deploy your app.
   * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
   * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
 
+## Project Contributors
+
+* Inthrayuth Mahaphol
+* Nadiya Yeroshkina
+* Daniel Wulff
+* Reed Lambier
+
+###CopyRight
+ all rights reserved (c) MIT.

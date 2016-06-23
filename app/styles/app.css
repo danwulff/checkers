@@ -17,6 +17,34 @@ body {
   height: 100px;
 }
 
+.jumbotron {
+  margin-top: 10px;
+}
+
+#contact_image {
+  border-radius: 20px;
+  margin-top: 20px;
+  margin: auto;
+}
+
+#contact_container {
+  margin-top: 20px;
+  padding-top: 10px;
+  border: 1px black solid;
+  border-radius: 10px;
+  box-shadow: 10px 10px 5px #888888;
+  background-color: #d9d9d9
+}
+
+/*#contact_info {
+  border: 1px black solid;
+  margin-left: 300px;
+}*/
+
+#contact_head {
+  text-align: center;
+}
+
 .red-pointer:hover {
   border: 1px solid yellow;
   cursor:url('/assets/images/circle-red-arrow.png'), auto;
