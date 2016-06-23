@@ -132,6 +132,7 @@ export default Ember.Component.extend({
 
     // Player Click
     gameClick(id) {
+      console.log("I clicked something!");
       // Helper functions-------------------------------------------------------
 
       //change incoming id (from click action) to array value for board
