@@ -592,12 +592,12 @@ export default Ember.Component.extend({
         } else { /*don't do anything*/}
         //check winner every click
         var winner = checkWinner(this.game);
-        if (winner === this.game.playerRed) {
+        if (winner === this.game.playerRed && this.game.jumpMove === false) {
           this.game.winner = this.game.playerRed;
           Ember.$('#winner').html("<h1>" +this.game.playerRed + " is the winner!</h1>");
           this.set('game.turn', '');
           Ember.$('#startGame').show();
-        } else if (winner === this.game.playerBlack) {
+        } else if (winner === this.game.playerBlack && this.game.jumpMove === false) {
           this.game.winner = this.game.playerBlack;
           Ember.$('#winner').html("<h1>" + this.game.playerBlack + " is the winner!</h1>");
           this.set('game.turn', '');
