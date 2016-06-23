@@ -176,6 +176,8 @@ export default Ember.Component.extend({
             }
           }
         }
+        //revert winner stuff
+        Ember.$('#winner').html("");
         //hide start game input form
         Ember.$('#startGame').hide();
         //send data to firebase
