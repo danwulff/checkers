@@ -6,6 +6,17 @@
     <title>Checkers</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCUKLG6OMsWhdS3NvrO4Xhjl3uKAMndT-A",
+        authDomain: "checkers-4120c.firebaseapp.com",
+        databaseURL: "https://checkers-4120c.firebaseio.com",
+        storageBucket: "",
+      };
+      firebase.initializeApp(config);
+    </script>
 
     {{content-for "head"}}
 

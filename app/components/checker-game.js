@@ -1,6 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
+  //Game Data-------------------------------------------------------------------
   game: {
     playerRed: null,  //username of red player
     playerBlack: null,
@@ -10,6 +11,46 @@ export default Ember.Component.extend({
     startPosition: null,  //id of position of checker origin
     board: [] //array of EVERYTHING
   },
+  //End: Game Data--------------------------------------------------------------
+
+  //FIREBASE!!!!!---------------------------------------------------------------
+  init() {
+    this._super(...arguments);
+    var self = this;
+    firebase.database().ref('games/0').on('value', function(snapshot) {
+      //get game data from firebase
+      self.set('game', snapshot.val());
+      //function that draws new board
+      //print checker board (in template) through full 8x8 grid
+      for(var y = 0; y < 8; y++) {
+        for (var x = 0; x < 8; x++) {
+          var id = 'x' + x + 'y' + y;
+          var prettyPrint = id.charAt(1) + "," + id.charAt(3);
+          Ember.$('#' + id).html(prettyPrint);
+          //if board[xy math] === 'checker', append html
+          if (self.game.board[(x + y*8)].value === 'red-reg') {
+            Ember.$('#' + id).append("<img src='assets/images/circle-red.png' class='checker'/>");
+          } else if (self.game.board[(x + y*8)].value === 'red-king') {
+            Ember.$('#' + id).append("<img src='assets/images/king-red.png' class='checker'/>");
+          } else if (self.game.board[(x + y*8)].value === 'black-reg') {
+            Ember.$('#' + id).append("<img src='assets/images/circle-black.png' class='checker'/>");
+          } else if (self.game.board[(x + y*8)].value === 'black-king') {
+            Ember.$('#' + id).append("<img src='assets/images/king-black.png' class='checker'/>");
+          }
+        }
+      }
+      if(self.game.board !== null) {
+        //hide start game input form
+        Ember.$('#startGame').hide();
+      }
+    });
+  },
+
+  willDestroyElement() {
+    firebase.database().ref('games/0').off('value');
+  },
+  //End: FIREBASE!!!!!----------------------------------------------------------
+
   //actions
   actions: {
     //button action to concede the game
@@ -19,7 +60,7 @@ export default Ember.Component.extend({
       } else{
         Ember.$('#winner').html("<h1>" + this.game.playerBlack + " is the winner!</h1>");
       }
-      this.set('game.turn', null);
+      this.set('game.turn', '');
       Ember.$('#startGame').show();
     },
 
@@ -36,83 +77,83 @@ export default Ember.Component.extend({
         this.set('game.turn', this.game.playerRed);       //set to 'username' of playerRed
         this.game.click = 'first';        //set to 'first' click
         this.game.jumpMove = false;       //set to not in the middle of a jump move
-        this.game.startPosition = null;   //no previous position for checker move
+        this.game.startPosition = '';   //no previous position for checker move
         this.game.board = (function() {   //setup game board
           var board = [];
           //coordinates of 8x8 board, starting at top right
 
           //row 0
-          board[0] = {x: 0, y: 0, value: null}; // null, 'red-reg', 'red-king', 'black-reg', 'black-king'
+          board[0] = {x: 0, y: 0, value: ''}; // '', 'red-reg', 'red-king', 'black-reg', 'black-king'
           board[1] = {x: 1, y: 0, value: 'black-reg'};
-          board[2] = {x: 2, y: 0, value: null};
+          board[2] = {x: 2, y: 0, value: ''};
           board[3] = {x: 3, y: 0, value: 'black-reg'};
-          board[4] = {x: 4, y: 0, value: null};
+          board[4] = {x: 4, y: 0, value: ''};
           board[5] = {x: 5, y: 0, value: 'black-reg'};
-          board[6] = {x: 6, y: 0, value: null};
+          board[6] = {x: 6, y: 0, value: ''};
           board[7] = {x: 7, y: 0, value: 'black-reg'};
           //row 1
           board[8] = {x: 0, y: 1, value: 'black-reg'};
-          board[9] = {x: 1, y: 1, value: null};
+          board[9] = {x: 1, y: 1, value: ''};
           board[10] = {x: 2, y: 1, value: 'black-reg'};
-          board[11] = {x: 3, y: 1, value: null};
+          board[11] = {x: 3, y: 1, value: ''};
           board[12] = {x: 4, y: 1, value: 'black-reg'};
-          board[13] = {x: 5, y: 1, value: null};
+          board[13] = {x: 5, y: 1, value: ''};
           board[14] = {x: 6, y: 1, value: 'black-reg'};
-          board[15] = {x: 7, y: 1, value: null};
+          board[15] = {x: 7, y: 1, value: ''};
           //row 2
-          board[16] = {x: 0, y: 2, value: null};
+          board[16] = {x: 0, y: 2, value: ''};
           board[17] = {x: 1, y: 2, value: 'black-reg'};
-          board[18] = {x: 2, y: 2, value: null};
+          board[18] = {x: 2, y: 2, value: ''};
           board[19] = {x: 3, y: 2, value: 'black-reg'};
-          board[20] = {x: 4, y: 2, value: null};
+          board[20] = {x: 4, y: 2, value: ''};
           board[21] = {x: 5, y: 2, value: 'black-reg'};
-          board[22] = {x: 6, y: 2, value: null};
+          board[22] = {x: 6, y: 2, value: ''};
           board[23] = {x: 7, y: 2, value: 'black-reg'};
           //row 3
-          board[24] = {x: 0, y: 3, value: null};
-          board[25] = {x: 1, y: 3, value: null};
-          board[26] = {x: 2, y: 3, value: null};
-          board[27] = {x: 3, y: 3, value: null};
-          board[28] = {x: 4, y: 3, value: null};
-          board[29] = {x: 5, y: 3, value: null};
-          board[30] = {x: 6, y: 3, value: null};
-          board[31] = {x: 7, y: 3, value: null};
+          board[24] = {x: 0, y: 3, value: ''};
+          board[25] = {x: 1, y: 3, value: ''};
+          board[26] = {x: 2, y: 3, value: ''};
+          board[27] = {x: 3, y: 3, value: ''};
+          board[28] = {x: 4, y: 3, value: ''};
+          board[29] = {x: 5, y: 3, value: ''};
+          board[30] = {x: 6, y: 3, value: ''};
+          board[31] = {x: 7, y: 3, value: ''};
           //row 4
-          board[32] = {x: 0, y: 4, value: null};
-          board[33] = {x: 1, y: 4, value: null};
-          board[34] = {x: 2, y: 4, value: null};
-          board[35] = {x: 3, y: 4, value: null};
-          board[36] = {x: 4, y: 4, value: null};
-          board[37] = {x: 5, y: 4, value: null};
-          board[38] = {x: 6, y: 4, value: null};
-          board[39] = {x: 7, y: 4, value: null};
+          board[32] = {x: 0, y: 4, value: ''};
+          board[33] = {x: 1, y: 4, value: ''};
+          board[34] = {x: 2, y: 4, value: ''};
+          board[35] = {x: 3, y: 4, value: ''};
+          board[36] = {x: 4, y: 4, value: ''};
+          board[37] = {x: 5, y: 4, value: ''};
+          board[38] = {x: 6, y: 4, value: ''};
+          board[39] = {x: 7, y: 4, value: ''};
           //row 5
           board[40] = {x: 0, y: 5, value: 'red-reg'};
-          board[41] = {x: 1, y: 5, value: null};
+          board[41] = {x: 1, y: 5, value: ''};
           board[42] = {x: 2, y: 5, value: 'red-reg'};
-          board[43] = {x: 3, y: 5, value: null};
+          board[43] = {x: 3, y: 5, value: ''};
           board[44] = {x: 4, y: 5, value: 'red-reg'};
-          board[45] = {x: 5, y: 5, value: null};
+          board[45] = {x: 5, y: 5, value: ''};
           board[46] = {x: 6, y: 5, value: 'red-reg'};
-          board[47] = {x: 7, y: 5, value: null};
+          board[47] = {x: 7, y: 5, value: ''};
           //row 6
-          board[48] = {x: 0, y: 6, value: null};
+          board[48] = {x: 0, y: 6, value: ''};
           board[49] = {x: 1, y: 6, value: 'red-reg'};
-          board[50] = {x: 2, y: 6, value: null};
+          board[50] = {x: 2, y: 6, value: ''};
           board[51] = {x: 3, y: 6, value: 'red-reg'};
-          board[52] = {x: 4, y: 6, value: null};
+          board[52] = {x: 4, y: 6, value: ''};
           board[53] = {x: 5, y: 6, value: 'red-reg'};
-          board[54] = {x: 6, y: 6, value: null};
+          board[54] = {x: 6, y: 6, value: ''};
           board[55] = {x: 7, y: 6, value: 'red-reg'};
           //row 7
           board[56] = {x: 0, y: 7, value: 'red-reg'};
-          board[57] = {x: 1, y: 7, value: null};
+          board[57] = {x: 1, y: 7, value: ''};
           board[58] = {x: 2, y: 7, value: 'red-reg'};
-          board[59] = {x: 3, y: 7, value: null};
+          board[59] = {x: 3, y: 7, value: ''};
           board[60] = {x: 4, y: 7, value: 'red-reg'};
-          board[61] = {x: 5, y: 7, value: null};
+          board[61] = {x: 5, y: 7, value: ''};
           board[62] = {x: 6, y: 7, value: 'red-reg'};
-          board[63] = {x: 7, y: 7, value: null};
+          board[63] = {x: 7, y: 7, value: ''};
 
           return board;
         })();
@@ -135,8 +176,12 @@ export default Ember.Component.extend({
             }
           }
         }
+        //revert winner stuff
+        Ember.$('#winner').html("");
         //hide start game input form
         Ember.$('#startGame').hide();
+        //send data to firebase
+        firebase.database().ref('games/0').set(this.game);
       }
     },
     //End: setupGame()----------------------------------------------------------
@@ -248,7 +293,7 @@ export default Ember.Component.extend({
       var validCheckerMove = function (id, game) {
         var valid = false;
         //if location is next to original && is empty
-        if (isNearby(id, game) && game.board[idToIndex(id)].value === null) {
+        if (isNearby(id, game) && game.board[idToIndex(id)].value === '') {
           valid = true;
         }
         return valid;
@@ -257,7 +302,7 @@ export default Ember.Component.extend({
       var validJumpMove = function (id, game) {
         var valid = false;
         //if jump move position is empty and enemy is between
-        if (game.board[idToIndex(id)].value === null && isOneOver(id, game) && isEnemyBetween(id, game)) {
+        if (game.board[idToIndex(id)].value === '' && isOneOver(id, game) && isEnemyBetween(id, game)) {
           valid = true;
         }
         return valid;
@@ -431,7 +476,7 @@ export default Ember.Component.extend({
 
       // Game Logic-------------------------------------------------------------
       //if game started
-      if (this.game.turn !== null) {
+      if (this.game.turn !== '') {
         //if first click && valid checker (belongs to user)
         if(this.game.click === 'first' &&  validFirstChecker(id, this.game)) {
           //change pointer
@@ -458,8 +503,8 @@ export default Ember.Component.extend({
           else if(this.game.turn === this.game.playerBlack && idBlackKinged(id)  || this.game.board[idToIndex(this.game.startPosition)].value === 'black-king') {
             this.game.board[idToIndex(id)].value = 'black-king';
           }
-          //old position null
-          this.game.board[idToIndex(this.game.startPosition)].value = null;
+          //old position ''
+          this.game.board[idToIndex(this.game.startPosition)].value = '';
 
           //draw grid changes (place checker at id location and revert pointer to normal)
           placeChecker(id, this.game);
@@ -489,10 +534,10 @@ export default Ember.Component.extend({
           else if(this.game.turn === this.game.playerBlack && idBlackKinged(id)  || this.game.board[idToIndex(this.game.startPosition)].value === 'black-king') {
             this.game.board[idToIndex(id)].value = 'black-king';
           }
-          //old position null
-          this.game.board[idToIndex(this.game.startPosition)].value = null;
-          //enemy position null
-          this.game.board[enemyJumpCalcs(id, this.game)].value = null;
+          //old position ''
+          this.game.board[idToIndex(this.game.startPosition)].value = '';
+          //enemy position ''
+          this.game.board[enemyJumpCalcs(id, this.game)].value = '';
           //draw grid changes (placeholder checker as lightly shaded, keep cursor)
           placePlaceholder(id, this.game);
           //draw grid changes (removeEnemyChecker)
@@ -527,27 +572,26 @@ export default Ember.Component.extend({
           //not a jump move
           this.game.jumpMove = false;
 
-        } else { //don't do anything
+        } else { /*don't do anything*/}
+        //check winner every click
+        var winner = checkWinner(this.game);
+        if (winner === this.game.playerRed) {
+          Ember.$('#winner').html("<h1>" +this.game.playerRed + " is the winner!</h1>");
+          this.set('game.turn', '');
+          Ember.$('#startGame').show();
+        } else if (winner === this.game.playerBlack) {
+          Ember.$('#winner').html("<h1>" + this.game.playerBlack + " is the winner!</h1>");
+          this.set('game.turn', '');
+          Ember.$('#startGame').show();
+        } else {
+          //do nothing if no winner
+        }
+        //send data to firebase
+        firebase.database().ref('games/0').set(this.game);
       }
-      //check winner every click
-      var winner = checkWinner(this.game);
-      if (winner === this.game.playerRed) {
-        Ember.$('#winner').html("<h1>" +this.game.playerRed + " is the winner!</h1>");
-        this.set('game.turn', null);
-        Ember.$('#startGame').show();
-      } else if (winner === this.game.playerBlack) {
-        Ember.$('#winner').html("<h1>" + this.game.playerBlack + " is the winner!</h1>");
-        this.set('game.turn', null);
-        Ember.$('#startGame').show();
-      } else {
-        //do nothing if no winner
-      }
+      // End: Game Logic--------------------------------------------------------
     }
-    else { //else don't do anything
+    // End: Player Click--------------------------------------------------------
   }
-  // End: Game Logic--------------------------------------------------------
-}
-// End: Player Click--------------------------------------------------------
-}
-//End: actions
+  //End: actions
 });
