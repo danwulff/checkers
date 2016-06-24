@@ -10,7 +10,7 @@ export default Ember.Component.extend({
     click: null,     //'first' or 'second'
     jumpMove: null,  //false or true
     startPosition: null,  //id of position of checker origin
-    gamewinner: null,
+    winner: null,
     board: [] //array of EVERYTHING
   },
   user: null,
@@ -34,7 +34,7 @@ export default Ember.Component.extend({
       //if not a spectator and not currently playing
       if (self.user !== 'spectator' && self.user !== self.game.playerRed && self.user !== self.game.playerBlack) {
         //check for a finished game
-        if (self.game.gamewinner !== '' && self.game.turn === '') {
+        if (self.game.winner !== '' && self.game.turn === '') {
           //check to see if another user is waiting, otherwise add username to the playerWaiting list
           if (self.game.playerWaiting !== '' && self.game.playerWaiting !== self.user) {
             alert("another player is waiting... starting a new game");
@@ -125,7 +125,7 @@ export default Ember.Component.extend({
               board[63] = {x: 7, y: 7, value: ''};
 
               return board;
-            })();
+            });
 
             //print checker board (in template) through full 8x8 grid
             for(var y = 0; y < 8; y++) {
@@ -146,7 +146,7 @@ export default Ember.Component.extend({
               }
             }
             //revert winner banner
-            Ember.$('#winner').html("");
+            // Ember.$('#winner').html("");
             //send data to firebase
             firebase.database().ref('games/0').set(self.game);
 
