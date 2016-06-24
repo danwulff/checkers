@@ -21,7 +21,7 @@ export default Ember.Component.extend({
     var self = this;
 
     //prompt user for name upon page load
-    this.user = prompt("Please enter a username")
+    this.user = prompt("Please enter a username");
     if (this.user === '' || this.user === null) {
       alert('You did not enter a username. You will become a spectator.');
       this.user = 'spectator';
@@ -37,7 +37,7 @@ export default Ember.Component.extend({
         if (self.game.gamewinner !== '' && self.game.turn === '') {
           //check to see if another user is waiting, otherwise add username to the playerWaiting list
           if (self.game.playerWaiting !== '' && self.game.playerWaiting !== self.user) {
-            alert("another player is waiting... starting a new game")
+            alert("another player is waiting... starting a new game");
 
             self.game.playerRed = self.game.playerWaiting;      //username
             self.game.playerBlack = self.user;  //username
