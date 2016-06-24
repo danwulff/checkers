@@ -8,8 +8,7 @@ export function soundBackground() {
   var x = Math.round(Math.random());
   soundArr[x].loop = true;
   soundArr[x].play();
-  soundArr[x].volume = 0.3;
-
+  soundArr[x].volume = 0.2;
 }
 
 export default Ember.Helper.helper(soundBackground);
