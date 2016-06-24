@@ -211,6 +211,9 @@ export default Ember.Component.extend({
   },
 
   willDestroyElement() {
+    //if leave a game, make not a player waiting
+    //self.game.playerWaiting set to ''
+    //send firebase
     firebase.database().ref('games/0').off('value');
   },
   //End: FIREBASE!!!!!----------------------------------------------------------
