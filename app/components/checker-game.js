@@ -167,6 +167,7 @@ export default Ember.Component.extend({
         }
       }
 
+
       //to not overwrite opaque tiles when a it's your turn and a jumpMove
       if(!(self.game.click === 'second' && self.game.jumpMove === true)) {
         //function that draws new board
@@ -193,16 +194,20 @@ export default Ember.Component.extend({
       //checks incoming data for game winner and prints winner shiz
       if (self.game.winner === self.game.playerRed) {
         Ember.$('#winner').html("<h1>" + self.game.playerRed + " is the winner!</h1>");
+        Ember.$('#winner').show();
       } else if (self.game.winner === self.game.playerBlack) {
         Ember.$('#winner').html("<h1>" + self.game.playerBlack + " is the winner!</h1>");
+        Ember.$('#winner').show();
       } else {
         Ember.$('#winner').html("");
+        Ember.$('#winner').hide();
       }
 
       //shows player waiting status if you are the player watiting
       if (self.user === self.game.playerWaiting) {
         Ember.$('#winner').append("<p>You are in the queue as '" + self.user + "'. A game will start when another user connects.</p>");
       }
+
 
     });
   },

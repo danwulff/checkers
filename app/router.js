@@ -9,6 +9,7 @@ Router.map(function() {
   this.route('checkers');
   this.route('about');
   this.route('contact');
+  this.route('admin');
 });
 
 export default Router;
