@@ -17,17 +17,26 @@
 
 {{#if game.turn}}
   {{sound-start}}
-  <h4>It's {{game.turn}}'s turn</h4>
 
-  {{turn-image game.turn game.playerRed game.playerBlack}}
+  <div class="row">
+    <div class="col-xs-3">
+      <center><h3>It's <span style="color:blue">{{game.turn}}</span>'s turn</h3></center>
+      <hr>
+      {{turn-image game.turn game.playerRed game.playerBlack}}
+      <button {{action 'concedeGame'}} class="btn btn-warning">Concede</button>
+    </div>
 
-  <button {{action 'concedeGame'}} class="btn btn-warning">Concede</button>
+    <div class="col-xs-8">
+      {{instruction-short}}
+    </div>
+  </div>
+
 {{/if}}
 
 <div id="winner" style="text-align: center"></div>
 
 <div class="board">
-  {{sound-background}}
+  <!-- {{sound-background}} -->
   <!-- Row 0 -->
   <div class="row">
     <div class="col-xs-2">
