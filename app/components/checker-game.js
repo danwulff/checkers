@@ -125,7 +125,7 @@ export default Ember.Component.extend({
               board[63] = {x: 7, y: 7, value: ''};
 
               return board;
-            });
+            })();
 
             //print checker board (in template) through full 8x8 grid
             for(var y = 0; y < 8; y++) {
@@ -151,10 +151,8 @@ export default Ember.Component.extend({
             firebase.database().ref('games/0').set(self.game);
 
 
-
-
           } else {
-            //if now players waiting, add yourself to player waiting
+            //if no players waiting, add yourself to player waiting
             self.game.playerWaiting = self.user;
             //send data to firebase
             firebase.database().ref('games/0').set(self.game);
