@@ -2,6 +2,8 @@
 
 Welcome to our APP! This is the classic game of Checkers but with a space theme. All traditional Western Rules apply and are further explained in the content of the web app itself. This project was created with the EMBER Javascript framework over the course of four days for Epicodus's June Javascript course.
 
+The app will allow two players to play checkers against each other (from seperate browsers). If a game is in 'progress' with no players active, you can navigate to ./admin to reset the game.
+
 We hope you enjoy and if you have any questions or comments please feel free to contact us at Rlambier46@gmail.com.
 
 ## Prerequisites
